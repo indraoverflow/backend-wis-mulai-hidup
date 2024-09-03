@@ -12,3 +12,31 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+model user {
+  id BigInt @id @default(autoincrement())
+  name String? @db.VarChar(50)
+  email String @unique @db.VarChar(50)
+  password String? @db.Text
+  phone_number String? @db.VarChar(13)
+  gender Gender?
+  refresh_token String? @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  id_role BigInt
+  role role @relation(fields: [id_role], references: [id])
+  @@index([id, created_at])
+}
+
+model role {
+  id BigInt @id @default(autoincrement())
+  name String @db.VarChar(10)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  users user[]
+}

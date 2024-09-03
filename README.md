@@ -1,4 +1,4 @@
-## WIS-BACKEND-API 
+## WIS-BACKEND-API
 
 **Overview**
 
@@ -7,12 +7,21 @@ This project is a backend for a wedding invitation application. This backend is 
 **Framework & Library :**
 
 ```├──
+├── @prisma/client@5.19.1
+├── @types/bcrypt@5.0.2
+├── @types/cookie-parser@1.4.7
 ├── @types/express@4.17.21
+├── @types/jsonwebtoken@9.0.6
 ├── @types/morgan@1.9.9
 ├── @types/node@22.5.2
+├── bcrypt@5.1.1
+├── cookie-parser@1.4.6
+├── cors@2.8.5
 ├── dotenv@16.4.5
 ├── express-validator@7.2.0
 ├── express@4.19.2
+├── googleapis@143.0.0
+├── jsonwebtoken@9.0.2
 ├── morgan@1.10.0
 ├── prisma@5.19.1
 ├── ts-node@10.9.2
@@ -44,7 +53,7 @@ Install all required dependencies by running the following command:
 npm install
 ```
 
-    *using yarn*
+  Use yarn :
 
 ```bash
 yarn install
@@ -58,6 +67,9 @@ Create a .env file in the root of the project directory and add the following en
 PORT=3000
 DATABASE_URL=postgresql://username:password@localhost:5432/wedding_invitation
 JWT_SECRET=your_jwt_secret_key
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+REDIRECT_URI=http://localhost:3000/auth/google/callback
 ```
 
 Migration Database
@@ -70,13 +82,13 @@ npx prisma migrate dev --name push_db
 
 Running the Server :
 
-    Production :
+    Production
 
 ```bash
 npm run build && npm run start
 ```
 
-    Development :
+    Development
 
 ```bash
 npm run dev
