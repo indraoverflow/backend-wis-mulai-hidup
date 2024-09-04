@@ -6,7 +6,7 @@ This project is a backend for a wedding invitation application. This backend is 
 
 **Framework & Library :**
 
-```├──
+```bash
 ├── @prisma/client@5.19.1
 ├── @types/bcrypt@5.0.2
 ├── @types/cookie-parser@1.4.7
@@ -14,6 +14,7 @@ This project is a backend for a wedding invitation application. This backend is 
 ├── @types/jsonwebtoken@9.0.6
 ├── @types/morgan@1.9.9
 ├── @types/node@22.5.2
+├── @types/nodemailer@6.4.15
 ├── bcrypt@5.1.1
 ├── cookie-parser@1.4.6
 ├── cors@2.8.5
@@ -23,6 +24,7 @@ This project is a backend for a wedding invitation application. This backend is 
 ├── googleapis@143.0.0
 ├── jsonwebtoken@9.0.2
 ├── morgan@1.10.0
+├── nodemailer@6.9.15
 ├── prisma@5.19.1
 ├── ts-node@10.9.2
 └── typescript@5.5.4
@@ -70,6 +72,12 @@ JWT_SECRET=your_jwt_secret_key
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 REDIRECT_URI=http://localhost:3000/auth/google/callback
+
+# EMAIL SMTP CONFIG
+SMTP_HOST=smtp.ethereal.email
+SMTP_PORT=587
+SMTP_USER=daron.bartell@ethereal.email
+SMTP_PASS=H4tDCB7PF3y4kvxa9s
 ```
 
 Migration Database

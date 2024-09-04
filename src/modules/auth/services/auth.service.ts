@@ -1,8 +1,9 @@
-import { PrismaClient, Gender, Prisma } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { AuthType } from "../types/auth.types";
 import bcrypt from "bcrypt";
 import { Oauth2Client } from "../../../config/googleoauth";
 import { google } from "googleapis";
+import { JwtPayload, jwtSign } from "../../../commons/utils/jwtutils";
 
 export default class AuthService {
     private static prisma: PrismaClient = new PrismaClient();
@@ -33,7 +34,7 @@ export default class AuthService {
         };
     }
 
-    static async registerService(data: AuthType) {
+    static async registerService(data: AuthType): Promise<JwtPayload> {
         try {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(data.password, salt);
@@ -100,7 +101,7 @@ export default class AuthService {
         }
     }
 
-    static async authGoogleService(code: string) {
+    static async authGoogleService(code: string): Promise<JwtPayload> {
 
         const { tokens } = await Oauth2Client.getToken(code as string)
         Oauth2Client.setCredentials(tokens);
@@ -149,7 +150,7 @@ export default class AuthService {
                 id: newUser.id.toString(),
                 email: newUser.email,
                 name: newUser.name,
-                role: newUser.role.name
+                role: newUser.role.name,
             }
         } else {
             return {
@@ -159,7 +160,62 @@ export default class AuthService {
                 role: user.role.name
             }
         }
+    }
 
+    static async forgotPasswordService(data: AuthType) {
+        const user = await this.prisma.user.findFirst({
+            where: {
+                email: data.email
+            },
+            select: {
+                id: true,
+                email: true,
+                name: true,
+                gender: true,
+                role: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        })
 
+        if (!user) throw { message: "NOT_FOUND", status: 404 };
+
+        let payload = {
+            id: user.id.toString(),
+            email: user.email,
+            name: user.name,
+            role: user.role.name
+        }
+
+        const token = jwtSign(payload, "15m")
+
+        return token
+    }
+
+    static async changePasswordService(email: string, data: AuthType) {
+
+        const user = await this.prisma.user.findFirst({
+            where: {
+                email: email
+            }
+        })
+
+        if (!user) throw { message: "NOT_FOUND", status: 404 };
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(data.password, salt);
+
+        await this.prisma.user.update({
+            where: {
+                email: email
+            },
+            data: {
+                password: hashedPassword
+            }
+        })
+
+        return "Change password successfully"
     }
 }

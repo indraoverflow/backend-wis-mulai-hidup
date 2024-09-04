@@ -1,20 +1,17 @@
 import jwt from "jsonwebtoken";
 import config from "../../config/config";
 
-interface JwtPayload {
-    data: any;
-    expiresIn: string;
+export interface JwtPayload {
+    id: string
+    email: string
+    name?: string | null | undefined
+    role: string
 }
 
-const serializeBigInt = (obj: any): any => {
-    return JSON.parse(JSON.stringify(obj, (_, value) =>
-        typeof value === 'bigint' ? value.toString() : value
-    ));
-}
 
-export const jwtSign = (data: JwtPayload) => {
-    const serializedData = serializeBigInt(data);
-    return jwt.sign({ data: JSON.stringify(serializedData) }, config.SECRET_KEY, { expiresIn: data.expiresIn });
+
+export const jwtSign = (data: JwtPayload, expiresIn: string) => {
+    return jwt.sign(data, config.SECRET_KEY, { expiresIn: expiresIn });
 }
 
 export const jwtVerify = (token: string) => {
