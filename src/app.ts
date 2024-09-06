@@ -6,6 +6,7 @@ import authModule from "./modules/auth/auth.module";
 import userModule from "./modules/user/user.module";
 import adminModule from "./modules/admin/admin.module";
 import themeModule from "./modules/theme/theme.module";
+import receptionModule from "./modules/wedding_reception/reception.module";
 const app = express();
 
 app.use(morgan("dev"));
@@ -19,6 +20,7 @@ authModule(app);
 userModule(app);
 adminModule(app);
 themeModule(app);
+receptionModule(app);
 /* ROUTES Modules*/
 
 

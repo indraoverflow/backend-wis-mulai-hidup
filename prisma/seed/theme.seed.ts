@@ -6,13 +6,13 @@ async function main() {
     await prisma.theme.createMany({
         data: [
             {
-                name: "sakura",
+                theme_name: "sakura",
             },
             {
-                name: "mizuki",
+                theme_name: "mizuki",
             },
             {
-                name: "takumi",
+                theme_name: "takumi",
             },
         ],
     });
