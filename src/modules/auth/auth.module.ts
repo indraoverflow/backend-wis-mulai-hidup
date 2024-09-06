@@ -16,6 +16,7 @@ router.post("/forgetpassword", UpdateauthDto, AuthController.forgetPassword)
 router.post("/changepassword", UserJwtVerify.forgotPasswordVerify, UpdateauthDto, AuthController.changePassword)
 
 router.get("/refresh-token", UserJwtVerify.refreshTokenVerify, AuthController.refreshToken)
+router.delete("/logout", UserJwtVerify.userVerify, AuthController.logout)
 
 export default (app: Router) => {
     app.use("/auth", router);

@@ -17,27 +17,35 @@ export default class AuthService {
                 id: true,
                 email: true,
                 password: true,
+                name: true,
                 role: {
                     select: {
-                        name: true
+                        role_name: true
                     }
                 }
             }
         });
-        if (!user) throw { message: "NOT_FOUND", status: 404 };
+        if (!user) throw { message: "USER_NOT_FOUND", status: 404 };
         const isMatch = await bcrypt.compare(authtype.password, user.password as string);
         if (!isMatch) throw { message: "PASSWORD_NOT_MATCH", status: 400 }
         return {
             id: user.id.toString(),
             email: user.email,
-            role: user.role.name
-        };
+            name: user.name,
+            role_name: user.role?.role_name
+        }
     }
 
     static async registerService(data: AuthType): Promise<JwtPayload> {
         try {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(data.password, salt);
+            const role = await this.prisma.role.findFirst({
+                where: {
+                    role_name: "user"
+                }
+            })
+            if (!role) throw { message: "INTERNAL_SERVER_ERROR", status: 500 };
             const user = await this.prisma.user.create({
                 data: {
                     email: data.email,
@@ -45,9 +53,7 @@ export default class AuthService {
                     name: data.name,
                     gender: data.gender,
                     phone_number: data.phone_number,
-                    role: {
-                        connect: { id: 2 }
-                    },
+                    role_id: role?.id,
                 },
                 select: {
                     id: true,
@@ -56,7 +62,7 @@ export default class AuthService {
                     gender: true,
                     role: {
                         select: {
-                            name: true
+                            role_name: true
                         }
                     }
                 }
@@ -65,13 +71,14 @@ export default class AuthService {
                 id: user.id.toString(),
                 email: user.email,
                 name: user.name,
-                role: user.role.name
+                role_name: user.role?.role_name
             };
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
                 if (error.code === 'P2002') {
+                    const target = (error.meta?.target as string[])[0];
                     throw {
-                        message: "EMAIL_ALREADY_EXISTS",
+                        message: `${target.toUpperCase()}_ALREADY_EXISTS`,
                         status: 400
                     };
                 }
@@ -79,10 +86,21 @@ export default class AuthService {
             throw {
                 message: "INTERNAL_SERVER_ERROR",
                 status: 500
-            };
+            }
         }
     }
 
+    static async logoutService(id: string) {
+        await this.prisma.user.update({
+            where: {
+                id: BigInt(id)
+            },
+            data: {
+                refresh_token: null
+            }
+        })
+        return "Logout successfully"
+    }
     static async refreshTokenService(id: string, token: string) {
         try {
             await this.prisma.user.update({
@@ -120,20 +138,24 @@ export default class AuthService {
                 name: true,
                 role: {
                     select: {
-                        name: true
+                        role_name: true
                     }
                 }
             }
         })
 
         if (!user) {
+            const role = await this.prisma.role.findFirst({
+                where: {
+                    role_name: "user"
+                }
+            })
+            if (!role) throw { message: "INTERNAL_SERVER_ERROR", status: 500 };
             const newUser = await this.prisma.user.create({
                 data: {
                     email: userInfo.data.email,
                     name: userInfo.data.name,
-                    role: {
-                        connect: { id: 2 }
-                    },
+                    role_id: role?.id,
                 },
                 select: {
                     id: true,
@@ -141,7 +163,7 @@ export default class AuthService {
                     name: true,
                     role: {
                         select: {
-                            name: true
+                            role_name: true
                         }
                     }
                 }
@@ -150,14 +172,14 @@ export default class AuthService {
                 id: newUser.id.toString(),
                 email: newUser.email,
                 name: newUser.name,
-                role: newUser.role.name,
+                role_name: newUser.role?.role_name
             }
         } else {
             return {
                 id: user.id.toString(),
                 email: user.email,
                 name: user.name,
-                role: user.role.name
+                role_name: user.role?.role_name
             }
         }
     }
@@ -174,7 +196,7 @@ export default class AuthService {
                 gender: true,
                 role: {
                     select: {
-                        name: true
+                        role_name: true
                     }
                 }
             }
@@ -186,11 +208,9 @@ export default class AuthService {
             id: user.id.toString(),
             email: user.email,
             name: user.name,
-            role: user.role.name
+            role_name: user.role?.role_name
         }
-
         const token = jwtSign(payload, "15m")
-
         return token
     }
 

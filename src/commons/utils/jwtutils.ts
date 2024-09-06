@@ -5,7 +5,7 @@ export interface JwtPayload {
     id: string
     email: string
     name?: string | null | undefined
-    role: string
+    role_name?: string | null | undefined
 }
 
 
