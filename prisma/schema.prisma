@@ -44,6 +44,14 @@ model role {
   @@index([id, created_at])
 }
 
+enum Wedding_status {
+  scheduled
+  in_progress
+  postponed
+  completed
+  cancelled
+}
+
 model wedding_reception {
   id                 BigInt           @id @default(autoincrement())
   title_reception    String           @db.VarChar(50)
@@ -62,6 +70,7 @@ model wedding_reception {
   user_id            BigInt?
   theme_id           BigInt?          
   media_wedding       media[]
+  wedding_status     Wedding_status  
   wedding_ceremony_id BigInt?         @unique
   wedding_ceremony    wedding_ceremony?
   user               user?            @relation(fields: [user_id], references: [id], onDelete: Cascade)

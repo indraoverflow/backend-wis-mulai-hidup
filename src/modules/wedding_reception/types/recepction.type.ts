@@ -1,3 +1,5 @@
+import { wedding_status } from "@prisma/client"
+
 export type ReceptionType = {
 	title_reception: string
 	name_man: string
@@ -15,4 +17,5 @@ export type ReceptionType = {
 	user_id: number
 	theme_id: number
 	wedding_ceremony_id: number
+	wedding_status: wedding_status | null
 }

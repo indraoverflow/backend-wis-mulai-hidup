@@ -16,13 +16,28 @@ export default class ReceptionController extends AsyncHandler {
 		}
 	})
 
+	static GetOneReception = this.handleRequest(async (req: Request, res: Response) => {
+		const {id} = req.params
+		const response = await ReceptionService.getOneRecpetionService(+id)
+		return response
+	})
+
 	static CreateReception = this.handleRequest(async (req: Request, res: Response) => {
 		const body = req.body
 		const response = await ReceptionService.createReceptionService(body)
-		return {
-			status: 201,
-			message: "Create reception successfully",
-			data: response
-		}
+		return response
+	})
+
+	static DeleteOneReception = this.handleRequest(async (req: Request, res: Response) => {
+		const {id} = req.params
+		const response = await ReceptionService.deleteOneReceptionService(+id)
+		return response
+	})
+
+	static UpdateOneReception = this.handleRequest(async (req: Request, res: Response) => {
+		const {id} = req.params
+		const body = req.body
+		const response = await ReceptionService.updateOneReceptionService(+id, body)
+		return response
 	})
 }

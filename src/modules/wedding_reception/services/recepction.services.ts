@@ -29,6 +29,27 @@ export default class ReceptionService {
 		return reception
 	}
 
+	static async getOneRecpetionService(id: number) {
+		try {	
+			const receptionFound = await this.prisma.wedding_reception.findUnique({
+				where: { id }
+			})
+			if (!receptionFound) {
+				throw {
+					message: "RECEPTION_NOT_FOUND",
+					status: 404
+				}
+			}
+			return {
+				status: 200,
+				message: "Get one reception successfully",
+				data: receptionFound
+			}
+		} catch (error) {
+			return error
+		}
+	}
+
 	static async createReceptionService(data: ReceptionType) {
 		try {
 			const reception = await this.prisma.wedding_reception.create({
@@ -48,20 +69,68 @@ export default class ReceptionService {
 					address: data.address,
 					user_id: data.user_id,
 					theme_id: data.theme_id,
+					wedding_status: "scheduled"
 				},
 				select: {
 					id: true
 				}
 			})
-			return {
-				id: reception.id.toString(),
-				// title: reception.title_reception
+			return  {
+				status: 201,
+				message: "Create reception successfully"
 			}
 		} catch (error) {
 			throw {
 				message: "ISE",
 				status: 500
 			}
+		}
+	}
+
+	static async deleteOneReceptionService(id: number) {
+		try {
+			const recepctionFound = await this.prisma.wedding_reception.findUnique({
+				where: { id }
+			})
+			if (!recepctionFound) {
+				throw {
+					message: "RECEPTION_NOT_FOUND",
+					status: 404
+				}
+			}
+			await this.prisma.wedding_reception.delete({
+				where: { id }
+			})
+			return {
+				status: 200,
+				message: "Delete reception successfully"
+			}
+		} catch (error) {
+			return error
+		}
+	}
+
+	static async updateOneReceptionService(id: number, data: ReceptionType) {
+		try {
+			const recepctionFound = await this.prisma.wedding_reception.findUnique({
+				where: { id }
+			})
+			if (!recepctionFound) {
+				throw {
+					message: "RECEPTION_NOT_FOUND",
+					status: 404
+				}
+			}
+			await this.prisma.wedding_reception.update({
+				where: { id },
+				data
+			})
+			return {
+				status: 200,
+				message: "Update reception successfully"
+			}
+		} catch (error) {
+			return error
 		}
 	}
  }
