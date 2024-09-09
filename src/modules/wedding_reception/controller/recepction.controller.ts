@@ -16,6 +16,12 @@ export default class ReceptionController extends AsyncHandler {
 		}
 	})
 
+	static GetReceptionByUser = this.handleRequest(async (req: Request, res: Response) => {
+		const {id} = req.params
+		const response = await ReceptionService.getReceptionByUserService(+id)
+		return response
+	})
+
 	static GetOneReception = this.handleRequest(async (req: Request, res: Response) => {
 		const {id} = req.params
 		const response = await ReceptionService.getOneRecpetionService(+id)
@@ -38,6 +44,24 @@ export default class ReceptionController extends AsyncHandler {
 		const {id} = req.params
 		const body = req.body
 		const response = await ReceptionService.updateOneReceptionService(+id, body)
+		return response
+	})
+
+	static UpdateCancelReception = this.handleRequest(async (req: Request, res: Response) => {
+		const {id} = req.params
+		const response = await ReceptionService.updateCancelReceptionService(+id)
+		return response
+	})
+
+	static UpdateCompleteReception = this.handleRequest(async (req: Request, res: Response) => {
+		const {id} = req.params
+		const response = await ReceptionService.updateCompleteReceptionService(+id)
+		return response
+	})
+	
+	static UpdateInProgressReception = this.handleRequest(async (req: Request, res: Response) => {
+		const {id} = req.params
+		const response = await ReceptionService.updateInProgressReceptionService(+id)
 		return response
 	})
 }

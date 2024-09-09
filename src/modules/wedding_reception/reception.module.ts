@@ -9,6 +9,7 @@ router.get("/all", UserJwtVerify.adminVerify, ReceptionController.GetAllReceptio
 router.get("/:id", UserJwtVerify.adminVerify, ReceptionController.GetOneReception)
 router.delete("/:id", UserJwtVerify.adminVerify, ReceptionController.DeleteOneReception)
 router.patch("/:id", UserJwtVerify.adminVerify, ReceptionController.UpdateOneReception)
+router.get("/user/:id", UserJwtVerify.adminVerify, ReceptionController.GetReceptionByUser)
 router.post('/create', UserJwtVerify.adminVerify, CreateReceptionDto, ReceptionController.CreateReception)
 
 export default (app: Router) => {

@@ -24,9 +24,63 @@ export default class ReceptionService {
 				address: true,
 				user_id: true,
 				theme_id: true,
+				wedding_status: true
 			}
 		})
 		return reception
+	}
+
+	static async getReceptionByUserService(id: number) {
+		try {
+			const user = await this.prisma.user.findUnique({
+				where: {
+					id: id
+				},
+				include: {
+					role: true
+				}
+			})
+
+			if (!user) {
+				throw {
+					message: "USER_NOT_FOUND",
+					status: 404
+				}
+			} else if (user.role?.role_name !== 'user') {
+				throw {
+					message: "USER_NOT_FOUND",
+					status: 404
+				}
+			}
+			const reception = await this.prisma.wedding_reception.findMany({
+				where: {
+					user_id: id
+				},
+				select: {
+					id: true,
+					title_reception: true,
+					name_man: true,
+					title_man: true,
+					parent_man: true,
+					description_man: true,
+					name_woman: true,
+					title_woman: true,
+					parent_woman: true,
+					description_woman: true,
+					start_date: true,
+					end_date: true,
+					location: true,
+					address: true,
+					user_id: true,
+					theme_id: true,
+					wedding_status: true
+				}
+			})
+
+			return reception
+		} catch (error) {
+			return error
+		}
 	}
 
 	static async getOneRecpetionService(id: number) {
@@ -128,6 +182,82 @@ export default class ReceptionService {
 			return {
 				status: 200,
 				message: "Update reception successfully"
+			}
+		} catch (error) {
+			return error
+		}
+	}
+
+	static async updateCancelReceptionService(id: number) {
+		try {
+			const recepctionFound = await this.prisma.wedding_reception.findUnique({
+				where: { id }
+			})
+			if (!recepctionFound) {
+				throw {
+					message: "RECEPTION_NOT_FOUND",
+					status: 404
+				}
+			}
+			await this.prisma.wedding_reception.update({
+				where: { id },
+				data: {
+					wedding_status: 'cancelled'
+				}
+			})
+			return {
+				status: 200,
+				message: "Cancel reception successfully"
+			}
+		} catch (error) {
+			return error
+		}
+	}
+	static async updateCompleteReceptionService(id: number) {
+		try {
+			const recepctionFound = await this.prisma.wedding_reception.findUnique({
+				where: { id }
+			})
+			if (!recepctionFound) {
+				throw {
+					message: "RECEPTION_NOT_FOUND",
+					status: 404
+				}
+			}
+			await this.prisma.wedding_reception.update({
+				where: { id },
+				data: {
+					wedding_status: 'completed'
+				}
+			})
+			return {
+				status: 200,
+				message: "Complete reception successfully"
+			}
+		} catch (error) {
+			return error
+		}
+	}
+	static async updateInProgressReceptionService(id: number) {
+		try {
+			const recepctionFound = await this.prisma.wedding_reception.findUnique({
+				where: { id }
+			})
+			if (!recepctionFound) {
+				throw {
+					message: "RECEPTION_NOT_FOUND",
+					status: 404
+				}
+			}
+			await this.prisma.wedding_reception.update({
+				where: { id },
+				data: {
+					wedding_status: 'in_progress'
+				}
+			})
+			return {
+				status: 200,
+				message: "Reception in progress"
 			}
 		} catch (error) {
 			return error
