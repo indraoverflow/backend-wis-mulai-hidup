@@ -104,4 +104,6 @@ npm run dev
 
 # POSTMAN (ONPROGRESS)
 
+API DOC : https://documenter.getpostman.com/view/18320873/2sAXjQ3W64#b22c1dac-439a-4f8a-b4f7-cb7483401213
+
 ---

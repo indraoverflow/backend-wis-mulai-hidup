@@ -3,7 +3,8 @@ import AsyncHandler from '../../../commons/utils/asynhandler';
 import AuthService from '../services/auth.service';
 import { JwtPayload, jwtSign, jwtVerify } from '../../../commons/utils/jwtutils';
 import { AuthorizationOauth } from '../../../config/googleoauth';
-import SendEmail from '../../../commons/smtp/sendemail';
+
+// import SendEmail from '../../../commons/smtp/sendemail';
 
 export default class AuthController extends AsyncHandler {
     constructor() {
@@ -58,6 +59,19 @@ export default class AuthController extends AsyncHandler {
 
     })
 
+    static logout = this.handleRequest(async (req: Request, res: Response) => {
+        const access_token = req.cookies.access_token
+        const decoded = jwtVerify(access_token) as JwtPayload
+        await AuthService.logoutService(decoded.id)
+
+        res.clearCookie('access_token')
+        res.clearCookie('refresh_token')
+
+        return {
+            status: 200,
+            message: "Logout successfully"
+        }
+    })
 
     static authGoogle = (req: Request, res: Response) => {
         const url = AuthorizationOauth
@@ -120,7 +134,7 @@ export default class AuthController extends AsyncHandler {
 
         const refreshToken = req.cookies.refresh_token
         const decoded = jwtVerify(refreshToken) as JwtPayload
-        const payload = { id: decoded.id, email: decoded.email, role: decoded.role }
+        const payload = { id: decoded.id, email: decoded.email, name: decoded.name, role_name: decoded.role_name }
 
         const accesstoken = jwtSign(payload, "10m")
         const refreshtoken = jwtSign(payload, "1d")

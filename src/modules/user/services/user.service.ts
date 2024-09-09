@@ -12,11 +12,7 @@ export default class UserService {
                 gender: true,
                 phone_number: true,
                 password: true,
-                role: {
-                    select: {
-                        name: true
-                    }
-                }
+                role_id: true
             }
         })
         return user
@@ -43,9 +39,7 @@ export default class UserService {
                 name: true,
                 gender: true,
                 phone_number: true,
-                role: {
-                    select: { name: true }
-                }
+                role_id: true
             }
         })
         return user

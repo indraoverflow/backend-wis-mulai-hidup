@@ -1,6 +1,6 @@
 import { gender } from "@prisma/client"
 
-export type AuthType = {
+export type AdminType = {
     email: string
     password: string
     refresh_token?: string

@@ -6,10 +6,10 @@ async function roleSeed() {
     await prisma.role.createMany({
         data: [
             {
-                name: "admin"
+                role_name: "admin"
             },
             {
-                name: "user"
+                role_name: "user"
             }
         ]
     })

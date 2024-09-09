@@ -3,11 +3,18 @@
   "version": "1.0.0",
   "main": "src/server.ts",
   "scripts": {
-    "start": "node dist/server.js",
-    "dev": "nodemon src/server.ts",
+    "start": "node ./dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "npx tsc",
     "prod": "npm run build && npm run start",
-    "seed:role": "ts-node prisma/seed/role.seed.ts"
+    "seed:role": "ts-node prisma/seed/role.seed.ts",
+    "seed:user": "ts-node prisma/seed/user.seed.ts",
+    "seed:theme": "ts-node prisma/seed/theme.seed.ts",
+    "seed:reception": "ts-node prisma/seed/wedding_rep.seed.ts",
+    "seed:ceremony": "ts-node prisma/seed/wedding_cer.seed.ts",
+    "seed:media": "ts-node prisma/seed/media.seed.ts",
+    "seed:subscription": "ts-node prisma/seed/subscription.seed.ts",
+    "test": "ts-node src/test/model.test.ts"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +30,7 @@
     "@types/nodemailer": "^6.4.15",
     "prisma": "^5.19.1",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
