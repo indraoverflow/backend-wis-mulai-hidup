@@ -1,13 +1,26 @@
 import express, { NextFunction, Request, Response } from "express";
+import cookieParser from "cookie-parser";
 import morgan from "morgan";
+
+import authModule from "./modules/auth/auth.module";
+import userModule from "./modules/user/user.module";
+import adminModule from "./modules/admin/admin.module";
+import themeModule from "./modules/theme/theme.module";
+import receptionModule from "./modules/wedding_reception/reception.module";
 const app = express();
 
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
 
 /* ROUTES Modules*/
-
+authModule(app);
+userModule(app);
+adminModule(app);
+themeModule(app);
+receptionModule(app);
 /* ROUTES Modules*/
 
 
@@ -18,11 +31,8 @@ app.use((req, res, next) => {
 });
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-    res.status(error.status || 500).json({
-        error: {
-            message: error.message
-        }
-    });
+    console.log(error);
+    res.status(error.status || 404).json({ message: error.message });
 });
 
 
