@@ -23,6 +23,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.7",
+    "@types/csurf": "^1.11.5",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/morgan": "^1.9.9",
@@ -35,11 +36,14 @@
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",
+    "@types/express-rate-limit": "^6.0.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "csurf": "^1.11.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
     "express-validator": "^7.2.0",
     "googleapis": "^143.0.0",
     "jsonwebtoken": "^9.0.2",
