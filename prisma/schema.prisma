@@ -44,7 +44,7 @@ model role {
   @@index([id, created_at])
 }
 
-enum Wedding_status {
+enum wedding_status {
   scheduled
   in_progress
   postponed
@@ -70,7 +70,7 @@ model wedding_reception {
   user_id            BigInt?
   theme_id           BigInt?          
   media_wedding       media[]
-  wedding_status     Wedding_status  
+  wedding_status     wedding_status  
   wedding_ceremony_id BigInt?         @unique
   wedding_ceremony    wedding_ceremony?
   user               user?            @relation(fields: [user_id], references: [id], onDelete: Cascade)
@@ -115,7 +115,7 @@ model media {
   @@index([id,wedding_reception_id,created_at])
 }
 
-enum Expired_status {
+enum expired_status {
   on_process
   expired
   active
@@ -125,7 +125,7 @@ enum Expired_status {
 model subscription {
   id BigInt @id @default(autoincrement())
   expired_at DateTime
-  status_subscription Expired_status
+  status_subscription expired_status
   user_id BigInt @unique
   user user @relation(fields: [user_id], references: [id], onDelete: Cascade)
   payment payment[] 

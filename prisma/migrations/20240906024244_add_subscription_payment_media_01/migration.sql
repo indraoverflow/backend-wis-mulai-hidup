@@ -8,7 +8,7 @@
 CREATE TYPE "gender" AS ENUM ('male', 'female');
 
 -- CreateEnum
-CREATE TYPE "Expired_status" AS ENUM ('on_process', 'expired', 'active', 'suspend');
+CREATE TYPE "expired_status" AS ENUM ('on_process', 'expired', 'active', 'suspend');
 
 -- CreateEnum
 CREATE TYPE "payment_status" AS ENUM ('pending', 'success', 'failed');
@@ -25,7 +25,7 @@ DROP TYPE "Gender";
 CREATE TABLE "subscription" (
     "id" BIGSERIAL NOT NULL,
     "expired_at" TIMESTAMP(3) NOT NULL,
-    "status_subscription" "Expired_status" NOT NULL,
+    "status_subscription" "expired_status" NOT NULL,
     "payment_id" BIGINT NOT NULL,
     "user_id" BIGINT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

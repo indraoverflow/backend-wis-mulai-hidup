@@ -1,7 +1,7 @@
 -- CreateEnum
 CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE');
 
-CREATE TYPE "Wedding_status" AS ENUM ('scheduled', 'on_process', 'expired', 'active', 'suspend', 'canceled');
+CREATE TYPE "wedding_status" AS ENUM ('scheduled', 'on_process', 'expired', 'active', 'suspend', 'canceled');
 
 -- CreateTable
 CREATE TABLE "user" (
@@ -43,7 +43,7 @@ CREATE TABLE "wedding_reception" (
     "description_woman" VARCHAR(255) NOT NULL,
     "start_date" TIMESTAMP(3) NOT NULL,
     "end_date" TIMESTAMP(3) NOT NULL,
-    "wedding_status" "Wedding_status",
+    "wedding_status" "wedding_status",
     "location" VARCHAR(100) NOT NULL,
     "address" VARCHAR(255) NOT NULL,
     "user_id" BIGINT,
