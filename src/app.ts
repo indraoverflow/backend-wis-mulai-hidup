@@ -1,20 +1,34 @@
-import express, { NextFunction, Request, Response } from "express";
-import cookieParser from "cookie-parser";
-import morgan from "morgan";
-
-import authModule from "./modules/auth/auth.module";
-import userModule from "./modules/user/user.module";
-import adminModule from "./modules/admin/admin.module";
+import express, { NextFunction, Request, Response } from "express"
+import cookieParser from "cookie-parser"
+import morgan from "morgan"
+import csurf from "csurf"
+import authModule from "./modules/auth/auth.module"
+import userModule from "./modules/user/user.module"
+import adminModule from "./modules/admin/admin.module"
 import themeModule from "./modules/theme/theme.module";
-import receptionModule from "./modules/wedding_reception/reception.module";
+import receptionModule from "./modules/wedding_reception/reception.module"
+import ratelimit from "express-rate-limit"
+
+
 const app = express();
+const limit = ratelimit({
+    windowMs: 10 * 60 * 1000,
+    max: 100,
+    message: "Too many requests from this IP, please try again later."
+})
+
 
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(csurf({ cookie: true }))
+app.use(limit)
 
-
+app.get("/protect", (req: Request, res: Response) => {
+    res.cookie("XSRF-TOKEN", req.csrfToken())
+    res.json({ csrf_token: req.csrfToken() })
+})
 /* ROUTES Modules*/
 authModule(app);
 userModule(app);
