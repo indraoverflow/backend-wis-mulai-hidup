@@ -12,3 +12,143 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum gender {
+  male
+  female
+}
+
+model user {
+  id            BigInt    @id @default(autoincrement())
+  name          String?   @db.VarChar(50)
+  email         String    @unique @db.VarChar(50)
+  password      String?   @db.Text
+  phone_number  String?   @unique @db.VarChar(13)
+  gender        gender?
+  refresh_token String?   @db.Text
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  role_id       BigInt?
+  role          role?     @relation(fields: [role_id], references: [id],onDelete:SetNull)
+  subscription  subscription?
+  wedding_receptions wedding_reception[]
+  @@index([id, created_at, role_id,email])
+}
+
+model role {
+  id          BigInt   @id @default(autoincrement())
+  role_name   String   @db.VarChar(10)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  users       user[]
+  @@index([id, created_at])
+}
+
+enum wedding_status {
+  scheduled
+  in_progress
+  postponed
+  completed
+  cancelled
+}
+
+model wedding_reception {
+  id                 BigInt           @id @default(autoincrement())
+  title_reception    String           @db.VarChar(50)
+  name_man           String           @db.VarChar(50)
+  title_man          String           @db.VarChar(50)
+  parent_man         String           @db.VarChar(50)
+  description_man    String           @db.VarChar(255)
+  name_woman         String           @db.VarChar(50)
+  title_woman        String           @db.VarChar(50)
+  parent_woman       String           @db.VarChar(50)
+  description_woman  String           @db.VarChar(255)
+  start_date         DateTime
+  end_date           DateTime
+  location           String           @db.VarChar(100)
+  address            String           @db.VarChar(255)
+  user_id            BigInt?
+  theme_id           BigInt?          
+  media_wedding       media[]
+  wedding_status     wedding_status  
+  wedding_ceremony_id BigInt?         @unique
+  wedding_ceremony    wedding_ceremony?
+  user               user?            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  theme              theme?           @relation(fields: [theme_id], references: [id], onDelete: SetNull)
+  created_at         DateTime         @default(now())
+  updated_at         DateTime         @updatedAt
+  @@index([id, user_id, theme_id, created_at])
+}
+
+model wedding_ceremony {
+  id                   BigInt            @id @default(autoincrement())
+  title_ceremony       String            @db.VarChar(50)
+  start_date           DateTime
+  end_date             DateTime
+  location             String            @db.VarChar(100)
+  address              String            @db.VarChar(255)
+  created_at           DateTime          @default(now())
+  updated_at           DateTime          @updatedAt
+  wedding_reception_id BigInt            @unique
+  wedding_reception    wedding_reception @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
+  @@index([id, created_at])
+}
+
+model theme {
+  id BigInt @id @default(autoincrement())
+  theme_name String @unique @db.VarChar(50)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  wedding_receptions wedding_reception[]
+  @@index([id, created_at])
+}
+
+
+model media {
+  id BigInt @id @default(autoincrement())
+  photo_url String @db.VarChar(255)
+  title_media String @db.VarChar(50)
+  wedding_reception_id BigInt?
+  wedding_reception wedding_reception? @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  @@index([id,wedding_reception_id,created_at])
+}
+
+enum expired_status {
+  on_process
+  expired
+  active
+  suspend
+}
+
+model subscription {
+  id BigInt @id @default(autoincrement())
+  expired_at DateTime
+  status_subscription expired_status
+  user_id BigInt @unique
+  user user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  payment payment[] 
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  @@index([id, user_id, created_at])
+}
+
+enum payment_status {
+  pending
+  success
+  failed
+}
+
+model payment {
+  id BigInt @id @default(autoincrement())
+  payment_method String @db.VarChar(50)
+  payment_amount Decimal @db.Decimal(10, 2)
+  payment_date DateTime
+  status_payment payment_status?
+  subscription_id BigInt?
+  subscription subscription? @relation(fields: [subscription_id], references: [id], onDelete: SetNull)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  @@index([id, subscription_id, created_at])
+}

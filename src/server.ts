@@ -1,9 +1,8 @@
 import app from "./app";
-import { config } from "./config/config";
+import config from "./config/config";
 import http from "http";
 
 
-
-http.createServer(app).listen(config.port, () => {
-    console.log(`Server is running on port ${config.port}`);
+http.createServer(app).listen(config.PORT, () => {
+    console.log(`Server is running on port ${config.PORT}`);
 });

@@ -3,29 +3,51 @@
   "version": "1.0.0",
   "main": "src/server.ts",
   "scripts": {
-    "start": "node dist/server.js",
-    "dev": "nodemon src/server.ts",
+    "start": "node ./dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "npx tsc",
-    "prod": "npm run build && npm run start"
+    "prod": "npm run build && npm run start",
+    "seed:role": "ts-node prisma/seed/role.seed.ts",
+    "seed:user": "ts-node prisma/seed/user.seed.ts",
+    "seed:theme": "ts-node prisma/seed/theme.seed.ts",
+    "seed:reception": "ts-node prisma/seed/wedding_rep.seed.ts",
+    "seed:ceremony": "ts-node prisma/seed/wedding_cer.seed.ts",
+    "seed:media": "ts-node prisma/seed/media.seed.ts",
+    "seed:subscription": "ts-node prisma/seed/subscription.seed.ts",
+    "test": "ts-node src/test/model.test.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/csurf": "^1.11.5",
     "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.5.2",
+    "@types/nodemailer": "^6.4.15",
     "prisma": "^5.19.1",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",
+    "@types/express-rate-limit": "^6.0.0",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "csurf": "^1.11.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
     "express-validator": "^7.2.0",
+    "googleapis": "^143.0.0",
     "jsonwebtoken": "^9.0.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.15"
   }
 }
