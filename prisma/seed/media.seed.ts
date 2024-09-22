@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-    await prisma.media.createMany({
+    await prisma.wedding_media.createMany({
         data: [
             {
                 photo_url: "https://example.com/photo1.jpg",

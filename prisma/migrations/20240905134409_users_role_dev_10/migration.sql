@@ -47,7 +47,6 @@ CREATE TABLE "wedding_reception" (
     "location" VARCHAR(100) NOT NULL,
     "address" VARCHAR(255) NOT NULL,
     "user_id" BIGINT,
-    "wedding_ceremony_id" BIGINT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -133,9 +132,6 @@ CREATE INDEX "user_id_created_at_role_id_idx" ON "user"("id", "created_at", "rol
 
 -- CreateIndex
 CREATE INDEX "role_id_created_at_idx" ON "role"("id", "created_at");
-
--- CreateIndex
-CREATE UNIQUE INDEX "wedding_reception_wedding_ceremony_id_key" ON "wedding_reception"("wedding_ceremony_id");
 
 -- CreateIndex
 CREATE INDEX "wedding_reception_id_user_id_theme_id_created_at_idx" ON "wedding_reception"("id", "user_id", "created_at");

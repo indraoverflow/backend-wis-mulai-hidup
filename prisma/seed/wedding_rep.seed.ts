@@ -12,7 +12,6 @@ async function main() {
     await prisma.wedding_reception.create({
         data: {
             title_reception: "sakura",
-            theme_id: theme?.id,
             start_date: new Date(),
             end_date: new Date(),
             location: "sakura",
@@ -26,7 +25,6 @@ async function main() {
             title_woman: "sakura",
             parent_woman: "sakura",
             user_id: 1,
-            wedding_ceremony_id: 2,
             wedding_status: "scheduled",
         }
     });

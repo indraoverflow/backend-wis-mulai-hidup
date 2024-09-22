@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { ReceptionType } from "../types/recepction.type";
+import { WeddingCeremonyType } from "../../wedding_ceremony/types/wedding_ceremony.types";
 
 export default class ReceptionService {
 	private static prisma: PrismaClient = new PrismaClient();
@@ -23,7 +24,6 @@ export default class ReceptionService {
 				location: true,
 				address: true,
 				user_id: true,
-				theme_id: true,
 				wedding_status: true
 			}
 		})
@@ -72,7 +72,6 @@ export default class ReceptionService {
 					location: true,
 					address: true,
 					user_id: true,
-					theme_id: true,
 					wedding_status: true
 				}
 			})
@@ -104,7 +103,7 @@ export default class ReceptionService {
 		}
 	}
 
-	static async createReceptionService(data: ReceptionType) {
+	static async createReceptionService(data: ReceptionType, theme_id: number, wedding_ceremony: WeddingCeremonyType) {
 		try {
 			const reception = await this.prisma.wedding_reception.create({
 				data: {
@@ -122,11 +121,26 @@ export default class ReceptionService {
 					location: data.location,
 					address: data.address,
 					user_id: data.user_id,
-					theme_id: data.theme_id,
-					wedding_status: "scheduled"
+					wedding_status: "scheduled",
 				},
 				select: {
 					id: true
+				}
+			})
+			await this.prisma.wedding_reception_theme.create({
+				data: {
+					wedding_reception_id: reception.id,
+					theme_id
+				}
+			})
+			await this.prisma.wedding_ceremony.create({
+				data: {
+					title_ceremony: wedding_ceremony.title_ceremony,
+					start_date: new Date(wedding_ceremony.start_date),
+					end_date: new Date(wedding_ceremony.end_date),
+					location: wedding_ceremony.location,
+					address: wedding_ceremony.address,
+					wedding_reception_id: reception.id
 				}
 			})
 			return  {

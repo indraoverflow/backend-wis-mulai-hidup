@@ -15,7 +15,5 @@ export type ReceptionType = {
 	location: string
 	address: string
 	user_id: number
-	theme_id: number
-	wedding_ceremony_id: number
 	wedding_status: wedding_status | null
 }

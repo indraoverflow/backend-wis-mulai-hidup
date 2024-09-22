@@ -13,7 +13,7 @@ export default class UserJwtVerify {
             next: NextFunction
         ) {
 
-        const token = req.headers.authorization?.split(' ')[1];
+        const token = req.headers.authorization
 
         if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
@@ -47,9 +47,8 @@ export default class UserJwtVerify {
             res: Response,
             next: NextFunction
         ) {
-
-        const token = req.headers.authorization?.split(' ')[1];
-        const csrf_token = req.headers['X-CSRF-TOKEN']
+        const token = req.headers.authorization;
+        const csrf_token = req.headers['x-csrf-token']
         if (!token || !csrf_token) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
@@ -108,7 +107,7 @@ export default class UserJwtVerify {
     }
 
     static async refreshTokenVerify(req: Request, res: Response, next: NextFunction) {
-        const csrf_token = req.cookies["X-XSRF-TOKEN"]
+        const csrf_token = req.cookies["X-XSRF-token"]
         const refreshToken = req.cookies.refresh_token
         if (!refreshToken || csrf_token) return res.status(401).json({ message: 'Unauthorized' });
         try {

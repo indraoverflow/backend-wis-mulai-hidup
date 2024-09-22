@@ -14,7 +14,7 @@ router.patch("/status/complete/:id", UserJwtVerify.adminVerify, ReceptionControl
 router.patch("/status/in_progress/:id", UserJwtVerify.adminVerify, ReceptionController.UpdateInProgressReception)
 
 router.get("/user/:id", UserJwtVerify.adminVerify, ReceptionController.GetReceptionByUser)
-router.post('/create', UserJwtVerify.adminVerify, CreateReceptionDto, ReceptionController.CreateReception)
+router.post('/create', UserJwtVerify.userVerify, CreateReceptionDto, ReceptionController.CreateReception)
 
 export default (app: Router) => {
 	app.use("/receptions", router)
