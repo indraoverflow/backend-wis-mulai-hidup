@@ -68,16 +68,14 @@ model wedding_reception {
   location           String           @db.VarChar(100)
   address            String           @db.VarChar(255)
   user_id            BigInt?
-  theme_id           BigInt?          
-  media_wedding       media[]
+  wedding_media       wedding_media[]
   wedding_status     wedding_status  
   wedding_ceremony_id BigInt?         @unique
   wedding_ceremony    wedding_ceremony?
   user               user?            @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  theme              theme?           @relation(fields: [theme_id], references: [id], onDelete: SetNull)
   created_at         DateTime         @default(now())
   updated_at         DateTime         @updatedAt
-  @@index([id, user_id, theme_id, created_at])
+  @@index([id, user_id, created_at])
 }
 
 model wedding_ceremony {
@@ -99,12 +97,19 @@ model theme {
   theme_name String @unique @db.VarChar(50)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  wedding_receptions wedding_reception[]
   @@index([id, created_at])
 }
 
+model wedding_reception_theme {
+  id BigInt @id @default(autoincrement())
+  wedding_reception_id BigInt?
+  theme_id BigInt?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  @@index([id, created_at])
+}
 
-model media {
+model wedding_media {
   id BigInt @id @default(autoincrement())
   photo_url String @db.VarChar(255)
   title_media String @db.VarChar(50)
@@ -113,6 +118,25 @@ model media {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   @@index([id,wedding_reception_id,created_at])
+}
+
+model bride_groom_media {
+   id BigInt @id @default(autoincrement())
+    photo_url String @db.VarChar(255)
+    wedding_reception_id BigInt?
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    @@index([id,wedding_reception_id,created_at])
+}
+
+model invitation {
+    id BigInt @id @default(autoincrement())
+    name String @db.VarChar(255)
+    phone_number String @db.VarChar(255)
+    wedding_reception_id BigInt?
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    @@index([id,wedding_reception_id,created_at])
 }
 
 enum expired_status {
