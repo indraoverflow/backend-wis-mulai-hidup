@@ -30,7 +30,9 @@ export default class ReceptionController extends AsyncHandler {
 
 	static CreateReception = this.handleRequest(async (req: Request, res: Response) => {
 		const body = req.body
-		const response = await ReceptionService.createReceptionService(body)
+		const {theme_id} = body
+		const {wedding_ceremony} = body
+		const response = await ReceptionService.createReceptionService(body, theme_id, wedding_ceremony)
 		return response
 	})
 

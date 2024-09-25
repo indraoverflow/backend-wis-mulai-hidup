@@ -3,7 +3,7 @@ dotenv.config();
 
 export default {
     PORT: process.env.PORT! || 3000,
-    SECRET_KEY: process.env.SECRET_KEY!, //SECRET_KEY ONLY INTO ENV FILE
+    SECRET_KEY: process.env.JWT_SECRET, //SECRET_KEY ONLY INTO ENV FILE
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID!,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET!,
     REDIRECT_URI: process.env.REDIRECT_URI! || "http://localhost:3000/auth/google/callback",

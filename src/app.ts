@@ -8,6 +8,8 @@ import adminModule from "./modules/admin/admin.module"
 import themeModule from "./modules/theme/theme.module";
 import receptionModule from "./modules/wedding_reception/reception.module"
 import ratelimit from "express-rate-limit"
+import weddingThemeModule from "./modules/wedding_theme/wedding_theme.module"
+import invitationModule from "./modules/invitation/invitation.module"
 
 
 const app = express();
@@ -35,6 +37,8 @@ userModule(app);
 adminModule(app);
 themeModule(app);
 receptionModule(app);
+weddingThemeModule(app);
+invitationModule(app);
 /* ROUTES Modules*/
 
 

@@ -47,8 +47,6 @@ CREATE TABLE "wedding_reception" (
     "location" VARCHAR(100) NOT NULL,
     "address" VARCHAR(255) NOT NULL,
     "user_id" BIGINT,
-    "theme_id" BIGINT,
-    "wedding_ceremony_id" BIGINT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -80,8 +78,18 @@ CREATE TABLE "theme" (
     CONSTRAINT "theme_pkey" PRIMARY KEY ("id")
 );
 
+CREATE TABLE "wedding_reception_theme" (
+    "id" BIGSERIAL NOT NULL,
+    "wedding_reception_id" BIGINT,
+    "theme_id" BIGINT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "wedding_reception_theme_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateTable
-CREATE TABLE "media" (
+CREATE TABLE "wedding_media" (
     "id" BIGSERIAL NOT NULL,
     "photo_url" VARCHAR(255) NOT NULL,
     "title_media" VARCHAR(50) NOT NULL,
@@ -89,7 +97,28 @@ CREATE TABLE "media" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "media_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "wedding_media_pkey" PRIMARY KEY ("id")
+);
+
+CREATE TABLE "bride_groom_media" (
+    "id" BIGSERIAL NOT NULL,
+    "photo_url" VARCHAR(255) NOT NULL,
+    "wedding_reception_id" BIGINT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "bride_groom_media_pkey" PRIMARY KEY ("id")
+);
+
+CREATE TABLE "invitation" (
+    "id" BIGSERIAL NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "phone_number" VARCHAR(255) NOT NULL,
+    "wedding_reception_id" BIGINT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "invitation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -105,10 +134,7 @@ CREATE INDEX "user_id_created_at_role_id_idx" ON "user"("id", "created_at", "rol
 CREATE INDEX "role_id_created_at_idx" ON "role"("id", "created_at");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "wedding_reception_wedding_ceremony_id_key" ON "wedding_reception"("wedding_ceremony_id");
-
--- CreateIndex
-CREATE INDEX "wedding_reception_id_user_id_theme_id_created_at_idx" ON "wedding_reception"("id", "user_id", "theme_id", "created_at");
+CREATE INDEX "wedding_reception_id_user_id_theme_id_created_at_idx" ON "wedding_reception"("id", "user_id", "created_at");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "wedding_ceremony_wedding_reception_id_key" ON "wedding_ceremony"("wedding_reception_id");
@@ -120,7 +146,16 @@ CREATE INDEX "wedding_ceremony_id_created_at_idx" ON "wedding_ceremony"("id", "c
 CREATE INDEX "theme_id_created_at_idx" ON "theme"("id", "created_at");
 
 -- CreateIndex
-CREATE INDEX "media_id_created_at_idx" ON "media"("id", "created_at");
+CREATE INDEX "wedding_reception_theme_wedding_reception_id_created_at_idx" ON "wedding_reception_theme"("id", "wedding_reception_id", "created_at");
+
+-- CreateIndex
+CREATE INDEX "bride_groom_media_wedding_reception_id_created_at_idx" ON "bride_groom_media"("id", "wedding_reception_id", "created_at");
+
+-- CreateIndex
+CREATE INDEX "wedding_media_id_created_at_idx" ON "wedding_media"("id", "created_at");
+
+-- CreateIndex
+CREATE INDEX "invitation_id_created_at_idx" ON "invitation"("id", "created_at");
 
 -- AddForeignKey
 ALTER TABLE "user" ADD CONSTRAINT "user_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -129,10 +164,18 @@ ALTER TABLE "user" ADD CONSTRAINT "user_role_id_fkey" FOREIGN KEY ("role_id") RE
 ALTER TABLE "wedding_reception" ADD CONSTRAINT "wedding_reception_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "wedding_reception" ADD CONSTRAINT "wedding_reception_theme_id_fkey" FOREIGN KEY ("theme_id") REFERENCES "theme"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+-- ALTER TABLE "wedding_reception" ADD CONSTRAINT "wedding_reception_theme_id_fkey" FOREIGN KEY ("theme_id") REFERENCES "theme"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "wedding_reception_theme" ADD CONSTRAINT "wedding_reception_theme_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE "wedding_reception_theme" ADD CONSTRAINT "wedding_reception_theme_theme_id_fkey" FOREIGN KEY ("theme_id") REFERENCES "theme"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE "bride_groom_media" ADD CONSTRAINT "bride_groom_media_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "wedding_ceremony" ADD CONSTRAINT "wedding_ceremony_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "media" ADD CONSTRAINT "media_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "wedding_media" ADD CONSTRAINT "wedding_media_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "invitation" ADD CONSTRAINT "invitation_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE CASCADE ON UPDATE CASCADE;

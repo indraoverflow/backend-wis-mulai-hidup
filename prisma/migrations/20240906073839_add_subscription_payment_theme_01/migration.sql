@@ -7,7 +7,7 @@
 
 */
 -- DropIndex
-DROP INDEX "media_id_created_at_idx";
+DROP INDEX "wedding_media_id_created_at_idx";
 
 -- DropIndex
 DROP INDEX "user_id_created_at_role_id_idx";
@@ -20,7 +20,7 @@ ALTER TABLE "theme" DROP COLUMN "name",
 ADD COLUMN     "theme_name" VARCHAR(50) NOT NULL;
 
 -- CreateIndex
-CREATE INDEX "media_id_wedding_reception_id_created_at_idx" ON "media"("id", "wedding_reception_id", "created_at");
+CREATE INDEX "wedding_media_id_wedding_reception_id_created_at_idx" ON "wedding_media"("id", "wedding_reception_id", "created_at");
 
 -- CreateIndex
 CREATE INDEX "user_id_created_at_role_id_email_idx" ON "user"("id", "created_at", "role_id", "email");
