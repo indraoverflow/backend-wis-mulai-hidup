@@ -88,6 +88,12 @@ This project uses prism for database management. Do the migration by entering th
 npx prisma migrate dev --name push_db
 ```
 
+Seeding Database
+
+```bash
+npm run seed:role;npm run seed:user;npm run seed:theme;npm run seed:reception;npm run seed:ceremony;npm run seed:media;npm run seed:subscription
+```
+
 Running the Server :
 
     Production
