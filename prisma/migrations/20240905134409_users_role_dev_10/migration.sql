@@ -3,6 +3,10 @@ CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE');
 
 CREATE TYPE "wedding_status" AS ENUM ('scheduled', 'on_process', 'expired', 'active', 'suspend', 'canceled');
 
+CREATE TYPE "time_zone" AS ENUM ('WIB', 'WITA', 'WIT');
+
+CREATE TYPE "media_owner" AS ENUM ('man', 'woman');
+
 -- CreateTable
 CREATE TABLE "user" (
     "id" BIGSERIAL NOT NULL,
@@ -34,19 +38,26 @@ CREATE TABLE "wedding_reception" (
     "id" BIGSERIAL NOT NULL,
     "title_reception" VARCHAR(50) NOT NULL,
     "name_man" VARCHAR(50) NOT NULL,
+    "prefix_man" VARCHAR(50) NOT NULL,
     "title_man" VARCHAR(50) NOT NULL,
-    "parent_man" VARCHAR(50) NOT NULL,
+    "father_man" VARCHAR(50) NOT NULL,
+    "mother_man" VARCHAR(50) NOT NULL,
     "description_man" VARCHAR(255) NOT NULL,
     "name_woman" VARCHAR(50) NOT NULL,
+    "prefix_woman" VARCHAR(50) NOT NULL,
     "title_woman" VARCHAR(50) NOT NULL,
-    "parent_woman" VARCHAR(50) NOT NULL,
+    "father_woman" VARCHAR(50) NOT NULL,
+    "mother_woman" VARCHAR(50) NOT NULL,
     "description_woman" VARCHAR(255) NOT NULL,
     "start_date" TIMESTAMP(3) NOT NULL,
     "end_date" TIMESTAMP(3) NOT NULL,
+    "time" VARCHAR(50) NOT NULL,
+    "time_zone" "time_zone" NOT NULL,
     "wedding_status" "wedding_status",
     "location" VARCHAR(100) NOT NULL,
     "address" VARCHAR(255) NOT NULL,
     "user_id" BIGINT,
+    "theme_id" BIGINT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -78,21 +89,21 @@ CREATE TABLE "theme" (
     CONSTRAINT "theme_pkey" PRIMARY KEY ("id")
 );
 
-CREATE TABLE "wedding_reception_theme" (
-    "id" BIGSERIAL NOT NULL,
-    "wedding_reception_id" BIGINT,
-    "theme_id" BIGINT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+-- CREATE TABLE "wedding_reception_theme" (
+--     "id" BIGSERIAL NOT NULL,
+--     "wedding_reception_id" BIGINT,
+--     "theme_id" BIGINT,
+--     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--     "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "wedding_reception_theme_pkey" PRIMARY KEY ("id")
-);
+--     CONSTRAINT "wedding_reception_theme_pkey" PRIMARY KEY ("id")
+-- );
 
 -- CreateTable
 CREATE TABLE "wedding_media" (
     "id" BIGSERIAL NOT NULL,
     "photo_url" VARCHAR(255) NOT NULL,
-    "title_media" VARCHAR(50) NOT NULL,
+    -- "title_media" VARCHAR(50) NOT NULL,
     "wedding_reception_id" BIGINT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -106,6 +117,7 @@ CREATE TABLE "bride_groom_media" (
     "wedding_reception_id" BIGINT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
+    "media_owner" "media_owner" NOT NULL,
 
     CONSTRAINT "bride_groom_media_pkey" PRIMARY KEY ("id")
 );
@@ -134,7 +146,7 @@ CREATE INDEX "user_id_created_at_role_id_idx" ON "user"("id", "created_at", "rol
 CREATE INDEX "role_id_created_at_idx" ON "role"("id", "created_at");
 
 -- CreateIndex
-CREATE INDEX "wedding_reception_id_user_id_theme_id_created_at_idx" ON "wedding_reception"("id", "user_id", "created_at");
+CREATE INDEX "wedding_reception_id_user_id_theme_id_created_at_idx" ON "wedding_reception"("id", "user_id", "created_at", "theme_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "wedding_ceremony_wedding_reception_id_key" ON "wedding_ceremony"("wedding_reception_id");
@@ -146,7 +158,7 @@ CREATE INDEX "wedding_ceremony_id_created_at_idx" ON "wedding_ceremony"("id", "c
 CREATE INDEX "theme_id_created_at_idx" ON "theme"("id", "created_at");
 
 -- CreateIndex
-CREATE INDEX "wedding_reception_theme_wedding_reception_id_created_at_idx" ON "wedding_reception_theme"("id", "wedding_reception_id", "created_at");
+-- CREATE INDEX "wedding_reception_theme_wedding_reception_id_created_at_idx" ON "wedding_reception_theme"("id", "wedding_reception_id", "created_at");
 
 -- CreateIndex
 CREATE INDEX "bride_groom_media_wedding_reception_id_created_at_idx" ON "bride_groom_media"("id", "wedding_reception_id", "created_at");
@@ -164,10 +176,13 @@ ALTER TABLE "user" ADD CONSTRAINT "user_role_id_fkey" FOREIGN KEY ("role_id") RE
 ALTER TABLE "wedding_reception" ADD CONSTRAINT "wedding_reception_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
--- ALTER TABLE "wedding_reception" ADD CONSTRAINT "wedding_reception_theme_id_fkey" FOREIGN KEY ("theme_id") REFERENCES "theme"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-ALTER TABLE "wedding_reception_theme" ADD CONSTRAINT "wedding_reception_theme_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "wedding_reception" ADD CONSTRAINT "wedding_reception_theme_id_fkey" FOREIGN KEY ("theme_id") REFERENCES "theme"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "wedding_reception_theme" ADD CONSTRAINT "wedding_reception_theme_theme_id_fkey" FOREIGN KEY ("theme_id") REFERENCES "theme"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+-- AddForeignKey
+-- ALTER TABLE "wedding_reception" ADD CONSTRAINT "wedding_reception_theme_id_fkey" FOREIGN KEY ("theme_id") REFERENCES "theme"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+-- ALTER TABLE "wedding_reception_theme" ADD CONSTRAINT "wedding_reception_theme_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- ALTER TABLE "wedding_reception_theme" ADD CONSTRAINT "wedding_reception_theme_theme_id_fkey" FOREIGN KEY ("theme_id") REFERENCES "theme"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE "bride_groom_media" ADD CONSTRAINT "bride_groom_media_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 

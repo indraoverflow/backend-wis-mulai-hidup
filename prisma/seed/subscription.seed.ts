@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function main() {
+export default async function main() {
     const subscription = await prisma.subscription.create({
         data: {
             user_id: 1,
@@ -19,10 +19,5 @@ async function main() {
             status_payment: "pending",
         }
     });
-
+    console.log("Media subscription completed");
 }
-
-main()
-    .then(() => {
-        console.log("Subscription created successfully");
-    })

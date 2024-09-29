@@ -49,7 +49,6 @@ app.use((req, res, next) => {
 });
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-    console.log(error);
     res.status(error.status || 404).json({ message: error.message });
 });
 
