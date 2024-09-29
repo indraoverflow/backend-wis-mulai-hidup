@@ -75,7 +75,7 @@ export default class ReceptionService {
 			return error
 		}
 	}
-
+  
 	static async createReceptionService(user_id: number, data: ReceptionType, theme_id: number, wedding_ceremony: WeddingCeremonyType) {
 		try {
 			const receptionT = await this.prisma.$transaction(async (prisma) => {

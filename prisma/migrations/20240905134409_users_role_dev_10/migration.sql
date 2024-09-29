@@ -88,7 +88,6 @@ CREATE TABLE "theme" (
 
     CONSTRAINT "theme_pkey" PRIMARY KEY ("id")
 );
-
 -- CREATE TABLE "wedding_reception_theme" (
 --     "id" BIGSERIAL NOT NULL,
 --     "wedding_reception_id" BIGINT,
@@ -158,6 +157,7 @@ CREATE INDEX "wedding_ceremony_id_created_at_idx" ON "wedding_ceremony"("id", "c
 CREATE INDEX "theme_id_created_at_idx" ON "theme"("id", "created_at");
 
 -- CreateIndex
+
 -- CREATE INDEX "wedding_reception_theme_wedding_reception_id_created_at_idx" ON "wedding_reception_theme"("id", "wedding_reception_id", "created_at");
 
 -- CreateIndex
@@ -183,6 +183,7 @@ ALTER TABLE "wedding_reception" ADD CONSTRAINT "wedding_reception_theme_id_fkey"
 -- ALTER TABLE "wedding_reception_theme" ADD CONSTRAINT "wedding_reception_theme_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- ALTER TABLE "wedding_reception_theme" ADD CONSTRAINT "wedding_reception_theme_theme_id_fkey" FOREIGN KEY ("theme_id") REFERENCES "theme"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
 
 ALTER TABLE "bride_groom_media" ADD CONSTRAINT "bride_groom_media_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
