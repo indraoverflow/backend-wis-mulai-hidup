@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-async function roleSeed() {
+export default async function roleSeed() {
     await prisma.role.createMany({
         data: [
             {
@@ -13,6 +13,5 @@ async function roleSeed() {
             }
         ]
     })
+    console.log("Role seed completed");
 }
-
-roleSeed()

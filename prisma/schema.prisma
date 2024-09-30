@@ -54,29 +54,43 @@ enum wedding_status {
   cancelled
 }
 
+enum time_zone {
+  WIB
+  WITA
+  WIT
+}
+
 model wedding_reception {
   id                      BigInt                    @id @default(autoincrement())
   title_reception         String                    @db.VarChar(50)
   name_man                String                    @db.VarChar(50)
+  prefix_man              String                    @db.VarChar(50)
   title_man               String                    @db.VarChar(50)
-  parent_man              String                    @db.VarChar(50)
+  father_man              String                    @db.VarChar(50)
+  mother_man              String                    @db.VarChar(50)
   description_man         String                    @db.VarChar(255)
+  prefix_woman             String                    @db.VarChar(50)
   name_woman              String                    @db.VarChar(50)
   title_woman             String                    @db.VarChar(50)
-  parent_woman            String                    @db.VarChar(50)
+  father_woman            String                    @db.VarChar(50)
+  mother_woman            String                    @db.VarChar(50)
   description_woman       String                    @db.VarChar(255)
   start_date              DateTime
   end_date                DateTime
+  time                    String
+  time_zone               time_zone
   location                String                    @db.VarChar(100)
   address                 String                    @db.VarChar(255)
   user_id                 BigInt?
   wedding_media           wedding_media[]
+  bride_groom_media       bride_groom_media[]
   wedding_status          wedding_status
   wedding_ceremony        wedding_ceremony?
   user                    user?                     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   created_at              DateTime                  @default(now())
   updated_at              DateTime                  @updatedAt
-  wedding_reception_theme wedding_reception_theme[]
+  theme_id                BigInt
+  theme                   theme                     @relation(fields: [theme_id], references: [id], onDelete: Cascade)
 
   @@index([id, user_id, created_at])
 }
@@ -101,17 +115,7 @@ model theme {
   theme_name String   @unique @db.VarChar(50)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-
-  @@index([id, created_at])
-}
-
-model wedding_reception_theme {
-  id                   BigInt             @id @default(autoincrement())
-  wedding_reception_id BigInt
-  wedding_reception    wedding_reception? @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
-  theme_id             BigInt
-  created_at           DateTime           @default(now())
-  updated_at           DateTime           @updatedAt
+  wedding_receptions  wedding_reception[]
 
   @@index([id, created_at])
 }
@@ -119,7 +123,6 @@ model wedding_reception_theme {
 model wedding_media {
   id                   BigInt             @id @default(autoincrement())
   photo_url            String             @db.VarChar(255)
-  title_media          String             @db.VarChar(50)
   wedding_reception_id BigInt?
   wedding_reception    wedding_reception? @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
   created_at           DateTime           @default(now())
@@ -128,12 +131,19 @@ model wedding_media {
   @@index([id, wedding_reception_id, created_at])
 }
 
+enum media_owner {
+  man
+  woman
+}
+
 model bride_groom_media {
   id                   BigInt   @id @default(autoincrement())
   photo_url            String   @db.VarChar(255)
   wedding_reception_id BigInt?
+  wedding_reception    wedding_reception? @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
   created_at           DateTime @default(now())
   updated_at           DateTime @updatedAt
+  media_owner          media_owner
 
   @@index([id, wedding_reception_id, created_at])
 }

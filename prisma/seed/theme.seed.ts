@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function main() {
+export default async function main() {
     await prisma.theme.createMany({
         data: [
             {
@@ -18,6 +18,3 @@ async function main() {
     });
     console.log("Theme seed completed");
 }
-
-main()
-

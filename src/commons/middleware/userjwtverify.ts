@@ -27,6 +27,7 @@ export default class UserJwtVerify {
                     email: decoded.email
                 }
             })
+            req.headers['user_id'] = decoded.id;
             if (!user) return res.status(401).json({ message: 'Unauthorized' });
 
             next()
@@ -62,7 +63,9 @@ export default class UserJwtVerify {
                     email: decoded.email
                 }
             })
+
             if (!user) return res.status(401).json({ message: 'Unauthorized' });
+            req.headers['user_id'] = decoded.id;
             next()
         } catch (error) {
             if (error instanceof JsonWebTokenError) {

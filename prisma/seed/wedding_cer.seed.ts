@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function main() {
+export default async function main() {
     const wedding_reception = await prisma.wedding_reception.findMany();
     await prisma.wedding_ceremony.create({
         data: {
@@ -16,5 +16,3 @@ async function main() {
     });
     console.log("Wedding ceremony seed completed");
 }
-
-main()

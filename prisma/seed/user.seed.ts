@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function main() {
+export default async function main() {
     await prisma.user.create({
         data: {
             name: "admin",
@@ -11,6 +11,5 @@ async function main() {
             role_id: 2,
         }
     });
+    console.log("User seed completed");
 }
-
-main()

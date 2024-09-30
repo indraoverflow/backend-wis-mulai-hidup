@@ -18,8 +18,6 @@ export const CreateReceptionDto = [
 		.isString(),
 	body('address')
 		.isString(),
-	body('user_id')
-		.isNumeric(),
 	(req: Request, res: Response, next: NextFunction) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
