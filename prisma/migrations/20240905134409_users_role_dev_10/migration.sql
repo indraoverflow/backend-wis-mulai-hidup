@@ -9,7 +9,7 @@ CREATE TYPE "media_owner" AS ENUM ('man', 'woman');
 
 -- CreateTable
 CREATE TABLE "user" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" VARCHAR(50),
     "email" VARCHAR(50) NOT NULL,
     "password" TEXT,
@@ -18,7 +18,7 @@ CREATE TABLE "user" (
     "refresh_token" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "role_id" BIGINT,
+    "role_id" INT,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );

@@ -10,6 +10,7 @@ import receptionModule from "./modules/wedding_reception/reception.module"
 import ratelimit from "express-rate-limit"
 import weddingThemeModule from "./modules/wedding_theme/wedding_theme.module"
 import invitationModule from "./modules/invitation/invitation.module"
+import subscriptionModule from "./modules/subscription/subscription.module"
 
 
 const app = express();
@@ -39,6 +40,7 @@ themeModule(app);
 receptionModule(app);
 weddingThemeModule(app);
 invitationModule(app);
+subscriptionModule(app);
 /* ROUTES Modules*/
 
 

@@ -10,22 +10,35 @@ CREATE TYPE "gender" AS ENUM ('male', 'female');
 -- CreateEnum
 CREATE TYPE "expired_status" AS ENUM ('on_process', 'expired', 'active', 'suspend');
 
+
 -- CreateEnum
 CREATE TYPE "payment_status" AS ENUM ('pending', 'success', 'failed');
 
 -- AlterTable
 ALTER TABLE "user" ADD COLUMN     "subscription_id" BIGINT,
 DROP COLUMN "gender",
-ADD COLUMN     "gender" "gender";
+ADD COLUMN   "gender" "gender";
 
 -- DropEnum
 DROP TYPE "Gender";
+
+-- CreateTable
+CREATE TABLE "subscription_type" (
+    "id" BIGSERIAL NOT NULL,
+    "name" VARCHAR(50) NOT NULL,
+    "price" NUMERIC(10, 2) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "subscription_type_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "subscription" (
     "id" BIGSERIAL NOT NULL,
     "expired_at" TIMESTAMP(3) NOT NULL,
     "status_subscription" "expired_status" NOT NULL,
+    "subscription_type_id" BIGINT NOT NULL,
     "payment_id" BIGINT NOT NULL,
     "user_id" BIGINT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -42,6 +55,7 @@ CREATE TABLE "payment" (
     "payment_date" TIMESTAMP(3) NOT NULL,
     "status_payment" "payment_status",
     "subscription_id" BIGINT NOT NULL,
+    "midtrans_token" VARCHAR(255) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -61,4 +75,7 @@ CREATE INDEX "payment_id_subscription_id_created_at_idx" ON "payment"("id", "sub
 ALTER TABLE "user" ADD CONSTRAINT "user_subscription_id_fkey" FOREIGN KEY ("subscription_id") REFERENCES "subscription"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "subscription" ADD CONSTRAINT "subscription_payment_id_fkey" FOREIGN KEY ("payment_id") REFERENCES "payment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "payment" ADD CONSTRAINT "payment_subscription_id_fkey" FOREIGN KEY ("subscription_id") REFERENCES "subscription"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "subscription" ADD CONSTRAINT "subscription_subscription_type_id_fkey" FOREIGN KEY ("subscription_type_id") REFERENCES "subscription_type"("id") ON DELETE SET NULL ON UPDATE CASCADE;

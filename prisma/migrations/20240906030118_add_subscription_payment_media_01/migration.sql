@@ -7,7 +7,7 @@
 
 */
 -- DropForeignKey
-ALTER TABLE "subscription" DROP CONSTRAINT "subscription_payment_id_fkey";
+ALTER TABLE "payment" DROP CONSTRAINT "payment_subscription_id_fkey";
 
 -- DropForeignKey
 ALTER TABLE "user" DROP CONSTRAINT "user_subscription_id_fkey";
@@ -23,4 +23,4 @@ ALTER TABLE "user" DROP COLUMN "subscription_id";
 ALTER TABLE "subscription" ADD CONSTRAINT "subscription_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "payment" ADD CONSTRAINT "payment_subscription_id_fkey" FOREIGN KEY ("subscription_id") REFERENCES "subscription"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "payment" ADD CONSTRAINT "payment_subscription_id_fkey" FOREIGN KEY ("subscription_id") REFERENCES "subscription"("id") ON DELETE CASCADE ON UPDATE CASCADE;
