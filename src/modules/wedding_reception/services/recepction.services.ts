@@ -83,20 +83,25 @@ export default class ReceptionService {
 					data: {
 						title_reception: data.title_reception,
 						name_man: data.name_man,
+						nickname_man: data.nickname_man,
 						prefix_man: data.prefix_man,
 						title_man: data.title_man,
 						father_man: data.father_man,
 						mother_man: data.mother_man,
 						description_man: data.description_man,
+						birthdate_man: new Date(data.birthdate_man),
 						name_woman: data.name_woman,
+						nickname_woman: data.nickname_woman,
 						prefix_woman: data.prefix_woman,
 						title_woman: data.title_woman,
 						father_woman: data.father_woman,
 						mother_woman: data.mother_woman,
 						description_woman: data.description_woman,
+						birthdate_woman: new Date(data.birthdate_woman),
 						start_date: new Date(data.start_date),
 						end_date: new Date(data.end_date),
-						time: data.time,
+						start_time: data.start_time,
+						end_time: data.end_time,
 						time_zone: data.time_zone,
 						location: data.location,
 						address: data.address,
@@ -114,38 +119,22 @@ export default class ReceptionService {
 						title_ceremony: wedding_ceremony.title_ceremony,
 						start_date: new Date(wedding_ceremony.start_date),
 						end_date: new Date(wedding_ceremony.end_date),
+						start_time: wedding_ceremony.start_time,
+						end_time: wedding_ceremony.end_time,
 						location: wedding_ceremony.location,
 						address: wedding_ceremony.address,
 						wedding_reception_id: reception.id
 					}
 				});
 
-				// await prisma.wedding_media.createMany({
-				// 	data: wedding_media.map((item) => ({
-				// 		photo_url: item.photo_url,
-				// 		wedding_reception_id: reception.id
-				// 	}))
-				// });
-
-				// man_media = man_media.map((item) => {
-				// 	return {
-				// 		...item,
-				// 		wedding_reception_id: Number(reception.id),
-				// 		media_owner: "man"
-				// 	}
-				// });
-
-				// woman_media = woman_media.map((item) => {
-				// 	return {
-				// 		...item,
-				// 		wedding_reception_id: Number(reception.id),
-				// 		media_owner: "woman"
-				// 	}
-				// });
-
-				// await prisma.bride_groom_media.createMany({
-				// 	data: [...man_media, ...woman_media]
-				// });
+				await prisma.account_bank.createMany({
+					data: data.account_bank.map((item) => ({
+						name: item.name,
+						number: item.number,
+						bank: item.bank,
+						wedding_reception_id: reception.id
+					}))
+				})
 
 				return reception; // Return the reception object
 			});

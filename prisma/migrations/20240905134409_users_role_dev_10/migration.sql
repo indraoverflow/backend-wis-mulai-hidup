@@ -38,20 +38,25 @@ CREATE TABLE "wedding_reception" (
     "id" BIGSERIAL NOT NULL,
     "title_reception" VARCHAR(50) NOT NULL,
     "name_man" VARCHAR(50) NOT NULL,
+    "nickname_man" VARCHAR(50) NOT NULL,
     "prefix_man" VARCHAR(50) NOT NULL,
     "title_man" VARCHAR(50) NOT NULL,
+    "birthdate_man" TIMESTAMP(3) NOT NULL,
     "father_man" VARCHAR(50) NOT NULL,
     "mother_man" VARCHAR(50) NOT NULL,
     "description_man" VARCHAR(255) NOT NULL,
     "name_woman" VARCHAR(50) NOT NULL,
+    "nickname_woman" VARCHAR(50) NOT NULL,
     "prefix_woman" VARCHAR(50) NOT NULL,
     "title_woman" VARCHAR(50) NOT NULL,
+    "birthdate_woman" TIMESTAMP(3),
     "father_woman" VARCHAR(50) NOT NULL,
     "mother_woman" VARCHAR(50) NOT NULL,
     "description_woman" VARCHAR(255) NOT NULL,
     "start_date" TIMESTAMP(3) NOT NULL,
     "end_date" TIMESTAMP(3) NOT NULL,
-    "time" VARCHAR(50) NOT NULL,
+    "start_time" VARCHAR(50) NOT NULL,
+    "end_time" VARCHAR(50) NOT NULL,
     "time_zone" "time_zone" NOT NULL,
     "wedding_status" "wedding_status",
     "location" VARCHAR(100) NOT NULL,
@@ -70,6 +75,8 @@ CREATE TABLE "wedding_ceremony" (
     "title_ceremony" VARCHAR(50) NOT NULL,
     "start_date" TIMESTAMP(3) NOT NULL,
     "end_date" TIMESTAMP(3) NOT NULL,
+    "start_time" VARCHAR(50) NOT NULL,
+    "end_time" VARCHAR(50) NOT NULL,
     "location" VARCHAR(100) NOT NULL,
     "address" VARCHAR(255) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -77,6 +84,20 @@ CREATE TABLE "wedding_ceremony" (
     "wedding_reception_id" BIGINT NOT NULL,
 
     CONSTRAINT "wedding_ceremony_pkey" PRIMARY KEY ("id")
+);
+
+
+-- CreateTable
+CREATE TABLE "account_bank" (
+    "id" BIGSERIAL NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "number" VARCHAR(100) NOT NULL,
+    "bank" VARCHAR(255) NOT NULL,
+    "wedding_reception_id" BIGINT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "account_bank_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -168,6 +189,8 @@ CREATE INDEX "wedding_media_id_created_at_idx" ON "wedding_media"("id", "created
 
 -- CreateIndex
 CREATE INDEX "invitation_id_created_at_idx" ON "invitation"("id", "created_at");
+-- CreateIndex
+CREATE INDEX "account_bank_id_created_at_idx" ON "account_bank"("id", "created_at");
 
 -- AddForeignKey
 ALTER TABLE "user" ADD CONSTRAINT "user_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "role"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -192,6 +215,9 @@ ALTER TABLE "wedding_ceremony" ADD CONSTRAINT "wedding_ceremony_wedding_receptio
 
 -- AddForeignKey
 ALTER TABLE "wedding_media" ADD CONSTRAINT "wedding_media_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "account_bank" ADD CONSTRAINT "wedding_media_account_bank_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "invitation" ADD CONSTRAINT "invitation_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE CASCADE ON UPDATE CASCADE;

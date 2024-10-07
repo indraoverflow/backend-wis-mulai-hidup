@@ -64,35 +64,52 @@ model wedding_reception {
   id                BigInt              @id @default(autoincrement())
   title_reception   String              @db.VarChar(50)
   name_man          String              @db.VarChar(50)
+  nickname_man      String              @db.VarChar(50)
   prefix_man        String              @db.VarChar(50)
   title_man         String              @db.VarChar(50)
+  birthdate_man     DateTime
   father_man        String              @db.VarChar(50)
   mother_man        String              @db.VarChar(50)
   description_man   String              @db.VarChar(255)
   prefix_woman      String              @db.VarChar(50)
   name_woman        String              @db.VarChar(50)
+  nickname_woman    String              @db.VarChar(50)
   title_woman       String              @db.VarChar(50)
+  birthdate_woman   DateTime
   father_woman      String              @db.VarChar(50)
   mother_woman      String              @db.VarChar(50)
   description_woman String              @db.VarChar(255)
   start_date        DateTime
   end_date          DateTime
-  time              String
+  start_time        String
+  end_time          String
   time_zone         time_zone
   location          String              @db.VarChar(100)
   address           String              @db.VarChar(255)
   user_id           BigInt?
-  wedding_media     wedding_media[]
   bride_groom_media bride_groom_media[]
   wedding_status    wedding_status
   wedding_ceremony  wedding_ceremony?
   user              user?               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  account_bank      account_bank[]
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
   theme_id          BigInt
   theme             theme               @relation(fields: [theme_id], references: [id], onDelete: Cascade)
+  wedding_media     wedding_media[]
 
   @@index([id, user_id, created_at])
+}
+
+model account_bank {
+  id                   BigInt            @id @default(autoincrement())
+  name                 String            @db.VarChar(255)
+  number               String            @db.VarChar(100)
+  bank                 String            @db.VarChar(255)
+  created_at           DateTime          @default(now())
+  updated_at           DateTime          @updatedAt
+  wedding_reception_id BigInt            @unique
+  wedding_reception    wedding_reception @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
 }
 
 model wedding_ceremony {
@@ -100,6 +117,8 @@ model wedding_ceremony {
   title_ceremony       String            @db.VarChar(50)
   start_date           DateTime
   end_date             DateTime
+  start_time           String
+  end_time             String
   location             String            @db.VarChar(100)
   address              String            @db.VarChar(255)
   created_at           DateTime          @default(now())
@@ -171,8 +190,8 @@ model subscription_type {
   name         String
   price        Int
   subscription subscription[]
-  created_at           DateTime          @default(now())
-  updated_at           DateTime          @updatedAt
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
 }
 
 model subscription {
