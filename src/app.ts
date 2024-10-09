@@ -10,7 +10,7 @@ import receptionModule from "./modules/wedding_reception/reception.module"
 import ratelimit from "express-rate-limit"
 import weddingThemeModule from "./modules/wedding_theme/wedding_theme.module"
 import invitationModule from "./modules/invitation/invitation.module"
-import subscriptionModule from "./modules/subscription/subscription.module"
+import paymentModule from "./modules/payment/payment.module"
 
 
 const app = express();
@@ -25,13 +25,13 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(csurf({ cookie: true }))
+// app.use(csurf({ cookie: true }))
 app.use(limit)
 
-app.get("/protect", (req: Request, res: Response) => {
-    res.cookie("XSRF-TOKEN", req.csrfToken())
-    res.json({ csrf_token: req.csrfToken() })
-})
+// app.get("/protect", (req: Request, res: Response) => {
+//     res.cookie("XSRF-TOKEN", req.csrfToken())
+//     res.json({ csrf_token: req.csrfToken() })
+// })
 /* ROUTES Modules*/
 authModule(app);
 userModule(app);
@@ -40,7 +40,7 @@ themeModule(app);
 receptionModule(app);
 weddingThemeModule(app);
 invitationModule(app);
-subscriptionModule(app);
+paymentModule(app);
 /* ROUTES Modules*/
 
 
