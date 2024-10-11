@@ -135,6 +135,7 @@ CREATE TABLE "bride_groom_media" (
     "id" BIGSERIAL NOT NULL,
     "photo_url" VARCHAR(255) NOT NULL,
     "wedding_reception_id" BIGINT,
+    "type"  VARCHAR(50) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "media_owner" "media_owner" NOT NULL,

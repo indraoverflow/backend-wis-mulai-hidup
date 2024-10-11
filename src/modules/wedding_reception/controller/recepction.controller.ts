@@ -47,7 +47,9 @@ export default class ReceptionController extends AsyncHandler {
 		const {weddingMedia} = photoLocations
 		const {manMedia} = photoLocations
 		const {womanMedia} = photoLocations
-		const response = await ReceptionService.updateReceptionMediaService(+receptionId, weddingMedia, manMedia, womanMedia)
+		const {ourStoryMan} = photoLocations
+		const {ourStoryWoman} = photoLocations
+		const response = await ReceptionService.updateReceptionMediaService(+receptionId, weddingMedia, manMedia, womanMedia, ourStoryMan, ourStoryWoman)
 		return {
 			status: 200,
 			message: "Upload reception media successfully",

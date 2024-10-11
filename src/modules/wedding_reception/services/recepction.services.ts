@@ -152,7 +152,7 @@ export default class ReceptionService {
 		}
 	}
 
-	static async updateReceptionMediaService(id: number, weddingMedia: WeddingMediaType[], manMedia: WeddingMediaType[], womanMedia: WeddingMediaType[]) {
+	static async updateReceptionMediaService(id: number, weddingMedia: WeddingMediaType[], manMedia: WeddingMediaType[], womanMedia: WeddingMediaType[], ourStoryMan: WeddingMediaType[], ourStoryWoman: WeddingMediaType[]) {
 		const receptionT = await this.prisma.$transaction(async (prisma) => {
 			const receptionFound = await prisma.wedding_reception.findUnique({
 				where: { id }
@@ -169,17 +169,33 @@ export default class ReceptionService {
 			manMedia = manMedia.map((item) => {
 				return {
 					...item,
+					type: 'personal',
 					media_owner: "man"
 				}
 			})
 			womanMedia = womanMedia.map((item) => {
 				return {
 					...item,
+					type: 'personal',
+					media_owner: "woman"
+				}
+			})
+			ourStoryMan = ourStoryMan.map((item) => {
+				return {
+					...item,
+					type: 'story',
+					media_owner: "man"
+				}
+			})
+			ourStoryWoman = ourStoryWoman.map((item) => {
+				return {
+					...item,
+					type: 'story',
 					media_owner: "woman"
 				}
 			})
 			await prisma.bride_groom_media.createMany({
-				data: [...manMedia, ...womanMedia]
+				data: [...manMedia, ...womanMedia, ...ourStoryMan, ...ourStoryWoman]
 			});
 		})
 		return {

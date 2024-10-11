@@ -24,21 +24,23 @@ const uploadMultiple = (req, res, next) => {
   upload.fields([
     { name: 'wedding_media', maxCount: 20 },
     { name: 'man_media', maxCount: 20 },
-    { name: 'woman_media', maxCount: 20 }
+    { name: 'woman_media', maxCount: 20 },
+    { name: 'our_story_man', maxCount: 20 },
+    { name: 'our_story_woman', maxCount: 20 },
   ])(req, res, (err) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-
     req.headers.photoLocations = {
       weddingMedia: [],
       manMedia: [],
-      womanMedia: []
+      womanMedia: [],
+      ourStoryMan: [],
+      ourStoryWoman: [],
     }; // Initialize an array to store locations
-
     const files = req.files; // Access uploaded files
     const uploadPromises = [];
-
+    
     // Process each file
     for (const field in files) {
       files[field].forEach((file) => {
@@ -65,6 +67,10 @@ const uploadMultiple = (req, res, next) => {
               req.headers.photoLocations.manMedia.push({photo_url:filePath, wedding_reception_id:+receptionId})
             } else if (file.fieldname === 'woman_media') {
               req.headers.photoLocations.womanMedia.push({photo_url:filePath, wedding_reception_id: +receptionId})
+            } else if (file.fieldname === 'our_story_man') {
+              req.headers.photoLocations.ourStoryMan.push({photo_url:filePath, wedding_reception_id: +receptionId})
+            } else if (file.fieldname === 'our_story_woman') {
+              req.headers.photoLocations.ourStoryWoman.push({photo_url:filePath, wedding_reception_id: +receptionId})
             }
             resolve({ Location: filePath }); // Resolve with file path
           });

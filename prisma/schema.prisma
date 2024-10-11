@@ -160,6 +160,7 @@ model bride_groom_media {
   photo_url            String             @db.VarChar(255)
   wedding_reception_id BigInt?
   wedding_reception    wedding_reception? @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
+  type                 String
   created_at           DateTime           @default(now())
   updated_at           DateTime           @updatedAt
   media_owner          media_owner
