@@ -19,7 +19,7 @@ export class PaymentService {
     }
     
     static async createPayment(data: paymentType,id:string) {
-      
+       
             let price = 150000
             let expired_date = new Date()
             expired_date.setDate(expired_date.getDate() + 30)
