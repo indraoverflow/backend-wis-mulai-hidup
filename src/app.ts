@@ -19,19 +19,19 @@ const limit = ratelimit({
     max: 100,
     message: "Too many requests from this IP, please try again later."
 })
-
+const csrfProtection = csurf({ cookie: true })
 
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-// app.use(csurf({ cookie: true }))
 app.use(limit)
+app.use(csrfProtection)
 
-// app.get("/protect", (req: Request, res: Response) => {
-//     res.cookie("XSRF-TOKEN", req.csrfToken())
-//     res.json({ csrf_token: req.csrfToken() })
-// })
+app.get("/protect", csrfProtection, (req: Request, res: Response) => {
+    res.cookie("XSRF-TOKEN", req.csrfToken())
+    res.json({ csrf_token: req.csrfToken() })
+})
 /* ROUTES Modules*/
 authModule(app);
 userModule(app);

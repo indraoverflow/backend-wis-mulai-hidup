@@ -13,13 +13,12 @@ export default class UserJwtVerify {
             next: NextFunction
         ) {
 
-        const token = req.headers.authorization
-
+        const token = req.headers.authorization?.split(" ")[1]
+        
         if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
         try {
             const decoded = jwtVerify(token) as JwtPayload;
-
             if (!decoded.id || decoded.role_name !== "user") return res.status(401).json({ message: 'Unauthorized' });
 
             const user = await UserJwtVerify.prisma.user.findFirst({
@@ -32,6 +31,8 @@ export default class UserJwtVerify {
 
             next()
         } catch (error) {
+            console.log(error);
+            
             if (error instanceof JsonWebTokenError) {
                 if (error.name === 'TokenExpiredError') {
                     return res.status(401).json({ message: 'TOKEN_EXPIRED' });
@@ -48,8 +49,8 @@ export default class UserJwtVerify {
             res: Response,
             next: NextFunction
         ) {
-        const token = req.headers.authorization;
-        const csrf_token = req.headers['x-csrf-token']
+        const token = req.headers.authorization?.split(" ")[1]
+        const csrf_token = req.headers['X-XSRF-TOKEN']
         if (!token || !csrf_token) {
             return res.status(401).json({ message: 'Unauthorized' });
         }

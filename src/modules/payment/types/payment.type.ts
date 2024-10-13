@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid"
 
 export type paymentType = {
     currency: "IDR",
@@ -10,7 +9,7 @@ export type paymentType = {
         virtual_account: {
             channel_code: string,
             channel_properties: {
-                customer_name: string
+                customer_name: string | ""
             },
             expires_at: string
         }
