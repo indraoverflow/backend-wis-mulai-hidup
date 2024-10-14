@@ -11,6 +11,7 @@ import ratelimit from "express-rate-limit"
 import weddingThemeModule from "./modules/wedding_theme/wedding_theme.module"
 import invitationModule from "./modules/invitation/invitation.module"
 import paymentModule from "./modules/payment/payment.module"
+import subscribeModule from "./modules/subscribe/subscribe.module"
 
 
 const app = express();
@@ -32,6 +33,7 @@ app.get("/protect", csrfProtection, (req: Request, res: Response) => {
     res.cookie("XSRF-TOKEN", req.csrfToken())
     res.json({ csrf_token: req.csrfToken() })
 })
+
 /* ROUTES Modules*/
 authModule(app);
 userModule(app);
@@ -41,6 +43,7 @@ receptionModule(app);
 weddingThemeModule(app);
 invitationModule(app);
 paymentModule(app);
+subscribeModule(app);
 /* ROUTES Modules*/
 
 
