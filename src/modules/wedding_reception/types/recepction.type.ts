@@ -25,6 +25,7 @@ export type ReceptionType = {
 	time_zone: time_zone
 	location: string
 	address: string
+	video_url: string
 	theme_id: number
 	wedding_status: wedding_status | null
 }

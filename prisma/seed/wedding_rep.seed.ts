@@ -38,6 +38,7 @@ export default async function main() {
             user_id: 1,
             theme_id: 1,
             wedding_status: "scheduled",
+            video_url: "https://www.youtube.com"
         }
     });
     console.log("Wedding reception seed completed");

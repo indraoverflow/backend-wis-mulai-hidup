@@ -6,13 +6,13 @@ import { Request } from "express";
 // Set up storage engine
 const storage = multer.diskStorage({
 	destination: (req: Request, file, cb) => {
-		if (file.fieldname === 'wedding_media') {
+		// if (file.fieldname === 'wedding_media') {
 			cb(null, 'src/assets/wedding_media');
-		} else if (file.fieldname === 'man_media' || file.fieldname === 'woman_media') {
-			cb(null, 'src/assets/broom_bride_media');
-		} else {
-			cb(null, 'src/assets/');
-		}
+		// } else if (file.fieldname === 'man_media' || file.fieldname === 'woman_media') {
+		// 	cb(null, 'src/assets/broom_bride_media');
+		// } else {
+		// 	cb(null, 'src/assets/');
+		// }
 	},
 	filename: (req, file, cb) => {
 		cb(null, `${Date.now()}-${file.originalname}`);
@@ -44,15 +44,16 @@ const uploadMultiple = (req, res, next) => {
     // Process each file
     for (const field in files) {
       files[field].forEach((file) => {
-        const myFile = file.originalname.split(".");
+        const myFile = file.filename.split(".");
         const fileType = myFile[myFile.length - 1];
 				let location = '../assets';	
-				if (file.fieldname === 'wedding_media') {
-					location = '../assets/wedding_media'
-				} else if (file.fieldname === 'man_media' || file.fieldname === 'woman_media') {
-					location = '../assets/broom_bride_media'
-				}
-        const filePath = path.join(__dirname, location, `${Date.now()}-${file.originalname}`); // Define file path
+        location = '../assets/wedding_media'
+        const date = Date.now()
+				// if (file.fieldname === 'wedding_media') {
+				// } else if (file.fieldname === 'man_media' || file.fieldname === 'woman_media') {
+				// 	location = '../assets/broom_bride_media'
+				// }
+        const filePath = path.join(__dirname, location, `${date}-${file.originalname}`); // Define file path
 
         // Push a promise to upload the file
         uploadPromises.push(new Promise((resolve, reject) => {
@@ -62,17 +63,17 @@ const uploadMultiple = (req, res, next) => {
             }
             const {receptionId} = req.params
             if (file.fieldname === 'wedding_media') {
-              req.headers.photoLocations.weddingMedia.push({photo_url:filePath, wedding_reception_id:+receptionId})
+              req.headers.photoLocations.weddingMedia.push({photo_url: `${process.env.BASE_URL}/wedding_media/${date}-${file.originalname}`, wedding_reception_id:+receptionId})
             } else if (file.fieldname === 'man_media') {
-              req.headers.photoLocations.manMedia.push({photo_url:filePath, wedding_reception_id:+receptionId})
+              req.headers.photoLocations.manMedia.push({photo_url: `${process.env.BASE_URL}/wedding_media/${date}-${file.originalname}`, wedding_reception_id:+receptionId})
             } else if (file.fieldname === 'woman_media') {
-              req.headers.photoLocations.womanMedia.push({photo_url:filePath, wedding_reception_id: +receptionId})
+              req.headers.photoLocations.womanMedia.push({photo_url: `${process.env.BASE_URL}/wedding_media/${date}-${file.originalname}`, wedding_reception_id: +receptionId})
             } else if (file.fieldname === 'our_story_man') {
-              req.headers.photoLocations.ourStoryMan.push({photo_url:filePath, wedding_reception_id: +receptionId})
+              req.headers.photoLocations.ourStoryMan.push({photo_url: `${process.env.BASE_URL}/wedding_media/${date}-${file.originalname}`, wedding_reception_id: +receptionId})
             } else if (file.fieldname === 'our_story_woman') {
-              req.headers.photoLocations.ourStoryWoman.push({photo_url:filePath, wedding_reception_id: +receptionId})
+              req.headers.photoLocations.ourStoryWoman.push({photo_url: `${process.env.BASE_URL}/wedding_media/${date}-${file.originalname}`, wedding_reception_id: +receptionId})
             }
-            resolve({ Location: filePath }); // Resolve with file path
+            resolve({ Location: `${date}-${file.originalname}` })
           });
         }));
       });

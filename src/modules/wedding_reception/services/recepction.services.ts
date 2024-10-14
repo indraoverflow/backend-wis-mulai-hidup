@@ -65,11 +65,18 @@ export default class ReceptionService {
 					status: 404
 				}
 			}
-
+			const formattedReception = {
+				...receptionFound,
+				woman_media: receptionFound.bride_groom_media?.filter((item) => item.media_owner === 'woman' && item.type == 'personal'),
+				man_media: receptionFound.bride_groom_media?.filter((item) => item.media_owner === 'man' && item.type == 'personal'),
+				man_story: receptionFound.bride_groom_media?.filter((item) => item.media_owner === 'man' && item.type == 'story'),
+				woman_story: receptionFound.bride_groom_media?.filter((item) => item.media_owner === 'woman' && item.type == 'story'),
+			}
+			delete formattedReception['bride_groom_media']
 			return {
 				status: 200,
 				message: "Get one reception successfully",
-				data: receptionFound
+				data: formattedReception
 			}
 		} catch (error) {
 			return error
@@ -105,6 +112,7 @@ export default class ReceptionService {
 						time_zone: data.time_zone,
 						location: data.location,
 						address: data.address,
+						video_url: data.video_url,
 						user_id: user_id,
 						theme_id: theme_id,
 						wedding_status: "scheduled",
@@ -141,7 +149,8 @@ export default class ReceptionService {
 
 			return {
 				status: 201,
-				message: "Create reception successfully"
+				message: "Create invitation reception successfully",
+				receptionId: receptionT.id
 			};
 		} catch (error) {
 			console.log(error, '<<<<<')

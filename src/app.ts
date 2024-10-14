@@ -11,7 +11,7 @@ import ratelimit from "express-rate-limit"
 import weddingThemeModule from "./modules/wedding_theme/wedding_theme.module"
 import invitationModule from "./modules/invitation/invitation.module"
 import subscriptionModule from "./modules/subscription/subscription.module"
-
+import path from "path"
 
 const app = express();
 const limit = ratelimit({
@@ -20,7 +20,7 @@ const limit = ratelimit({
     message: "Too many requests from this IP, please try again later."
 })
 
-
+app.use('/wedding_media', express.static(path.join(__dirname, 'assets', 'wedding_media')));
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

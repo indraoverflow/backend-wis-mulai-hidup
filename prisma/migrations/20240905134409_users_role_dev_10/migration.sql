@@ -61,6 +61,7 @@ CREATE TABLE "wedding_reception" (
     "wedding_status" "wedding_status",
     "location" VARCHAR(100) NOT NULL,
     "address" VARCHAR(255) NOT NULL,
+    "video_url" VARCHAR(255) NOT NULL,
     "user_id" BIGINT,
     "theme_id" BIGINT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

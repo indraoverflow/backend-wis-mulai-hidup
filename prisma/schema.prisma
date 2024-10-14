@@ -86,6 +86,7 @@ model wedding_reception {
   time_zone         time_zone
   location          String              @db.VarChar(100)
   address           String              @db.VarChar(255)
+  video_url         String              @db.VarChar(255)
   user_id           BigInt?
   bride_groom_media bride_groom_media[]
   wedding_status    wedding_status
