@@ -18,7 +18,7 @@ export default class UserJwtVerify {
         if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
         try {
-            const decoded = jwtVerify(token) as JwtPayload;
+            const decoded = jwtVerify(token) as unknown as JwtPayload;
 
             if (!decoded.id || decoded.role_name !== "user") return res.status(401).json({ message: 'Unauthorized' });
 

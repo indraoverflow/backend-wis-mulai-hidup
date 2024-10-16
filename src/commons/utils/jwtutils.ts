@@ -11,10 +11,10 @@ export interface JwtPayload {
 
 
 export const jwtSign = (data: JwtPayload, expiresIn: string) => {
-    return jwt.sign(data, config.SECRET_KEY, { expiresIn: expiresIn });
+    return jwt.sign(data, config.SECRET_KEY!, { expiresIn: expiresIn });
 }
 
 export const jwtVerify = (token: string) => {
-    return jwt.verify(token, config.SECRET_KEY);
+    return jwt.verify(token, config.SECRET_KEY!);
 }
 

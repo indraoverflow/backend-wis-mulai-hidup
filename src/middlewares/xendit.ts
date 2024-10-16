@@ -14,29 +14,29 @@ const xenditPaymentMethodClient = new PaymentMethodClient({secretKey: process.en
 
 // const response: Balance = await xenditBalanceClient.getBalance({});
 
-export async function xenditPayment(payload: any) {
-  const data: PaymentMethodParameters = {
-    mobileNumber: 628774494404,
-    reusability: "MULTIPLE_USE",
-    type: "DIRECT_DEBIT",
-    directDebit: {
-      channelProperties: {
-        failureReturnUrl: "https://redirect.me/failure",
-        successReturnUrl: "https://redirect.me/success",
-      },
-      channelCode: "BPI",
-    },
-    email: "testemail@email.com",
-    customer: {
-      type: "INDIVIDUAL",
-      referenceId: "customer-123",
-      individualDetail: {
-        surname: "Doe",
-        givenNames: "John",
-      },
-    },
-  };
-	const response: PaymentMethod = await xenditPaymentMethodClient.createPaymentMethod({
-    data
-	})
-}
+// export async function xenditPayment(payload: any) {
+//   const data: PaymentMethodParameters = {
+//     mobileNumber: "6287744944040",
+//     reusability: "MULTIPLE_USE",
+//     type: "DIRECT_DEBIT",
+//     directDebit: {
+//       channelProperties: {
+//         failureReturnUrl: "https://redirect.me/failure",
+//         successReturnUrl: "https://redirect.me/success",
+//       },
+//       channelCode: "BPI",
+//     },
+//     email: "testemail@email.com",
+//     customer: {
+//       type: "INDIVIDUAL",
+//       referenceId: "customer-123",
+//       individualDetail: {
+//         surname: "Doe",
+//         givenNames: "John",
+//       },
+//     },
+//   };
+// 	const response: PaymentMethod = await xenditPaymentMethodClient.createPaymentMethod({
+//     data
+// 	})
+// }

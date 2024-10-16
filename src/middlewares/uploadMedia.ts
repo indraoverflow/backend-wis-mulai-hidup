@@ -2,6 +2,7 @@ import multer from "multer";
 import fs from 'fs'; // Add fs import
 import path from 'path'; // Add path import
 import { Request } from "express";
+import PhotoLocations from "../modules/wedding_reception/controller/recepction.controller";
 // const storage = multer.memoryStorage();
 // Set up storage engine
 const storage = multer.diskStorage({
@@ -20,7 +21,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-const uploadMultiple = (req, res, next) => {
+const uploadMultiple = (req : any, res: any, next:any) => {
   upload.fields([
     { name: 'wedding_media', maxCount: 20 },
     { name: 'man_media', maxCount: 20 },
@@ -37,13 +38,13 @@ const uploadMultiple = (req, res, next) => {
       womanMedia: [],
       ourStoryMan: [],
       ourStoryWoman: [],
-    }; // Initialize an array to store locations
+    } as PhotoLocations;
     const files = req.files; // Access uploaded files
-    const uploadPromises = [];
+    const uploadPromises: any[] = [];
     
     // Process each file
     for (const field in files) {
-      files[field].forEach((file) => {
+      files[field].forEach((file: any) => {
         const myFile = file.filename.split(".");
         const fileType = myFile[myFile.length - 1];
 				let location = '../assets';	

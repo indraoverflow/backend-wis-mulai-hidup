@@ -2,6 +2,14 @@ import { Request, Response } from "express";
 import AsyncHandler from "../../../commons/utils/asynhandler";
 import ReceptionService from "../services/recepction.services";
 
+export default interface PhotoLocations {
+	weddingMedia: any[],
+	manMedia: any[],
+	womanMedia: any[],
+	ourStoryMan: any[],
+	ourStoryWoman: any[]
+}
+
 export default class ReceptionController extends AsyncHandler {
 	constructor() {
 		super()
@@ -33,17 +41,18 @@ export default class ReceptionController extends AsyncHandler {
 		const {theme_id} = body
 		const {wedding_ceremony} = body
 		const {user_id} = req.headers
+		const {account_bank} = body
 		// const {wedding_media} = body
 		// const {man_media} = body
 		// const {woman_media} = body
-		const response = await ReceptionService.createReceptionService(+user_id!, body, theme_id, wedding_ceremony)
+		const response = await ReceptionService.createReceptionService(+user_id!, body, theme_id, wedding_ceremony, account_bank)
 		// const response = await ReceptionService.createReceptionService(body, theme_id, wedding_ceremony, wedding_media, man_media, woman_media)
 		return response
 	})
 
 	static UploadReceptionMedia = this.handleRequest(async (req: Request, res: Response) => {
 		const {receptionId} = req.params
-		const {photoLocations} = req.headers 
+		const photoLocations = (req.headers?.photoLocations ?? {}) as PhotoLocations;
 		const {weddingMedia} = photoLocations
 		const {manMedia} = photoLocations
 		const {womanMedia} = photoLocations

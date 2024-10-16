@@ -1,7 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient  } from "@prisma/client";
 import { ReceptionType } from "../types/recepction.type";
 import { WeddingCeremonyType } from "../../wedding_ceremony/types/wedding_ceremony.types";
 import { WeddingMediaType } from "../types/wedding_media.type";
+import { BrideGroomMediaType } from "../types/bridge_groom_media.type";
 
 export default class ReceptionService {
 	private static prisma: PrismaClient = new PrismaClient();
@@ -72,7 +73,6 @@ export default class ReceptionService {
 				man_story: receptionFound.bride_groom_media?.filter((item) => item.media_owner === 'man' && item.type == 'story'),
 				woman_story: receptionFound.bride_groom_media?.filter((item) => item.media_owner === 'woman' && item.type == 'story'),
 			}
-			delete formattedReception['bride_groom_media']
 			return {
 				status: 200,
 				message: "Get one reception successfully",
@@ -83,7 +83,7 @@ export default class ReceptionService {
 		}
 	}
   
-	static async createReceptionService(user_id: number, data: ReceptionType, theme_id: number, wedding_ceremony: WeddingCeremonyType) {
+	static async createReceptionService(user_id: number, data: ReceptionType, theme_id: number, wedding_ceremony: WeddingCeremonyType, account_bank: any) {
 		try {
 			const receptionT = await this.prisma.$transaction(async (prisma) => {
 				const reception = await prisma.wedding_reception.create({
@@ -136,7 +136,7 @@ export default class ReceptionService {
 				});
 
 				await prisma.account_bank.createMany({
-					data: data.account_bank.map((item) => ({
+					data: account_bank.map((item: any) => ({
 						name: item.name,
 						number: item.number,
 						bank: item.bank,
@@ -161,7 +161,7 @@ export default class ReceptionService {
 		}
 	}
 
-	static async updateReceptionMediaService(id: number, weddingMedia: WeddingMediaType[], manMedia: WeddingMediaType[], womanMedia: WeddingMediaType[], ourStoryMan: WeddingMediaType[], ourStoryWoman: WeddingMediaType[]) {
+	static async updateReceptionMediaService(id: number, weddingMedia: WeddingMediaType[], manMedia: BrideGroomMediaType[], womanMedia: BrideGroomMediaType[], ourStoryMan: BrideGroomMediaType[], ourStoryWoman: BrideGroomMediaType[]) {
 		const receptionT = await this.prisma.$transaction(async (prisma) => {
 			const receptionFound = await prisma.wedding_reception.findUnique({
 				where: { id }
@@ -175,7 +175,7 @@ export default class ReceptionService {
 			await prisma.wedding_media.createMany({
 				data: weddingMedia
 			});
-			manMedia = manMedia.map((item) => {
+			manMedia= manMedia.map((item) => {
 				return {
 					...item,
 					type: 'personal',
@@ -236,7 +236,7 @@ export default class ReceptionService {
 		}
 	}
 
-	static async updateOneReceptionService(id: number, data: ReceptionType) {
+	static async updateOneReceptionService(id: number, data: ReceptionType ) {
 		try {
 			const recepctionFound = await this.prisma.wedding_reception.findUnique({
 				where: { id }

@@ -27,5 +27,5 @@ export type ReceptionType = {
 	address: string
 	video_url: string
 	theme_id: number
-	wedding_status: wedding_status | null
+	wedding_status: wedding_status
 }

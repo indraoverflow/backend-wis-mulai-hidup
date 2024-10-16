@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { xenditPayment } from "../../../middlewares/xendit";
 
 export default class SubscriptionService {
 	private static prisma: PrismaClient = new PrismaClient();
