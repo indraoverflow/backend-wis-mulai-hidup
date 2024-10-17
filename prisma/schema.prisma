@@ -181,20 +181,12 @@ model invitation {
 }
 
 enum expired_status {
-  on_process
-  expired
-  active
-  suspend
+  ON_PROCESS
+  EXPIRED
+  ACTIVE
+  SUSPEND
 }
 
-model subscription_type {
-  id           BigInt         @id @default(autoincrement())
-  name         String
-  price        Int
-  subscription subscription[]
-  created_at   DateTime       @default(now())
-  updated_at   DateTime       @updatedAt
-}
 
 model subscription {
   id                   BigInt            @id @default(autoincrement())
@@ -202,8 +194,6 @@ model subscription {
   status_subscription  expired_status
   user_id              BigInt            @unique
   user                 user              @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  subscription_type_id BigInt
-  subscription_type    subscription_type @relation(fields: [subscription_type_id], references: [id], onDelete: Cascade)
   payment              payment[]
   created_at           DateTime          @default(now())
   updated_at           DateTime          @updatedAt
@@ -212,22 +202,24 @@ model subscription {
 }
 
 enum payment_status {
-  pending
-  success
-  failed
+  PENDING
+  SUCCESS
+  FAILED
 }
 
 model payment {
   id              BigInt          @id @default(autoincrement())
-  payment_method  String          @db.VarChar(50)
-  payment_amount  Decimal         @db.Decimal(10, 2)
-  payment_date    DateTime
+  payment_bank    String          @db.VarChar(50)
+  payment_amount  Int             @db.Integer
+  payment_date    DateTime?
   status_payment  payment_status?
-  midtrans_token  String
   subscription_id BigInt?
   subscription    subscription?   @relation(fields: [subscription_id], references: [id], onDelete: Cascade)
-  created_at      DateTime        @default(now())
-  updated_at      DateTime        @updatedAt
-
+  payment_method_id String?
+  payment_request_id String?
+  virtual_account    String?
+  limit_payment_date DateTime?
+  created_at         DateTime        @default(now())
+  updated_at         DateTime        @updatedAt
   @@index([id, subscription_id, created_at])
 }

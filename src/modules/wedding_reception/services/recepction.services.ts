@@ -144,7 +144,7 @@ export default class ReceptionService {
 					}))
 				})
 
-				return reception; // Return the reception object
+				return reception; 
 			});
 
 			return {
