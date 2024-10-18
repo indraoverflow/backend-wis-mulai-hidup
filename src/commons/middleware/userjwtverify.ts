@@ -51,7 +51,8 @@ export default class UserJwtVerify {
             next: NextFunction
         ) {
         const token = req.headers.authorization?.split(" ")[1]
-        const csrf_token = req.headers['X-XSRF-TOKEN']
+        const csrf_token = req.headers['x-xsrf-token']
+        
         if (!token || !csrf_token) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
@@ -60,6 +61,7 @@ export default class UserJwtVerify {
             if (!decoded.id || decoded.role_name !== "admin") {
                 return res.status(401).json({ message: 'Unauthorized' });
             }
+            
             const user = await UserJwtVerify.prisma.user.findFirst({
                 where: {
                     email: decoded.email
@@ -112,7 +114,7 @@ export default class UserJwtVerify {
     }
 
     static async refreshTokenVerify(req: Request, res: Response, next: NextFunction) {
-        const csrf_token = req.cookies["X-XSRF-token"]
+        const csrf_token = req.cookies["x-xsrf-token"]
         const refreshToken = req.cookies.refresh_token
         if (!refreshToken || csrf_token) return res.status(401).json({ message: 'Unauthorized' });
         try {

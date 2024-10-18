@@ -28,4 +28,41 @@ export class SubscribeController extends AsyncHandler{
             data
         }
     })
+
+    static createSubscribetype = this.handleRequest(async(req:Request,res:Response)=>{
+        const {name,price} = req.body
+        const data = await SubscribeService.createSubscribetype(name,price)
+        return {
+            status:201,
+            message:"SUCCESS CREATE SUBSCRIBE TYPE",
+            data
+        }
+    })
+
+    static updateSubscribetype = this.handleRequest(async(req:Request,res:Response)=>{
+        const {id} = req.params
+        const {name,price} = req.body
+        const data = await SubscribeService.updateSubscribetype(id,name,price)
+        return {
+            message:"SUCCESS UPDATE SUBSCRIBE TYPE",
+            data
+        }
+    })
+    
+    static deleteSubscribetype = this.handleRequest(async(req:Request,res:Response)=>{
+        const {id} = req.params
+        const data = await SubscribeService.deleteSubscribetype(id)
+        return {
+            message:"SUCCESS DELETE SUBSCRIBE TYPE",
+            data
+        }
+    })
+    
+    static getSubscribeType = this.handleRequest(async(req:Request,res:Response)=>{
+        const data = await SubscribeService.getSubscribeType()
+        return {
+            message:"SUCCESS GET SUBSCRIBE TYPE",
+            data
+        }
+    })
 }

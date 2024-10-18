@@ -1,5 +1,6 @@
 {
-  "include": ["src/**/*", "prisma/seed/**/*"],
+  "include": ["src/**/*"],
+  "exclude": ["prisma/seed/**/*"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
     /* Projects */

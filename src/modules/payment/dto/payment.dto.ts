@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from 'express';
 
 // Validasi untuk CreatePaymentDto
 export const CreatePaymentDto = [
+    body('subscribe_type_id')
+        .isNumeric().withMessage('SUBSCRIBE_TYPE_ID_NOT_VALID'),
     body('currency')
         .isString().withMessage('CURRENCY_NOT_VALID')  
         .isIn(['IDR']).withMessage('CURRENCY_NOT_SUPPORTED'), 

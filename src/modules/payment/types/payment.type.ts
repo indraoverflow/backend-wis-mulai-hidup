@@ -1,5 +1,6 @@
 
 export type paymentType = {
+    subscribe_type_id:number,
     currency: "IDR",
     amount: number,
     payment_method: {

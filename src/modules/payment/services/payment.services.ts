@@ -41,6 +41,7 @@ export class PaymentService {
                 // Create subscription to database
                 const subscription = await this.prisma.subscription.create({
                     data : {
+                        subscription_type_id: data.subscribe_type_id,
                         expired_at: expired_date,
                         status_subscription: "ON_PROCESS",
                         user_id: user.id
