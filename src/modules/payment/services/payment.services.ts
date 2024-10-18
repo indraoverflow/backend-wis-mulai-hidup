@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { XenditLib } from "../../../commons/lib/xendit.lib";
 import { paymentType } from "../types/payment.type";
-import { v4 as uuidv4 } from 'uuid';
 
 export class PaymentService {
     
@@ -20,7 +19,12 @@ export class PaymentService {
     
     static async createPayment(data: paymentType,id:string) {
        
-            let price = 150000
+            const subscriptionType = await this.prisma.subscription_type.findFirst({
+                where: {
+                    id: data.subscribe_type_id
+                }
+            })
+            if(!subscriptionType) throw {message:"SUBSCRIBE_TYPE_NOT_FOUND",status:404}
             let expired_date = new Date()
             expired_date.setDate(expired_date.getDate() + 30)
             const user = await this.prisma.user.findUnique({
@@ -50,7 +54,7 @@ export class PaymentService {
                 // Create payment to xendit
                 let payload = {
                     ...data,
-                    amount: 150000,
+                    amount: subscriptionType.price,
                     payment_method: {
                         ...data.payment_method,
                         virtual_account: {
@@ -67,7 +71,7 @@ export class PaymentService {
                 await this.prisma.payment.create({
                     data : {
                         payment_bank: data.payment_method.virtual_account.channel_code,
-                        payment_amount: price,
+                        payment_amount: subscriptionType.price,
                         payment_date: new Date(),
                         subscription_id: subscription.id,
                         status_payment: "PENDING",
@@ -91,7 +95,7 @@ export class PaymentService {
                 })
                 let payload = {
                     ...data,
-                    amount: 150000,
+                    amount: subscriptionType.price,
                     payment_method: {
                         ...data.payment_method,
                         virtual_account: {
@@ -106,7 +110,7 @@ export class PaymentService {
                 await this.prisma.payment.create({
                     data : {
                         payment_bank: data.payment_method.virtual_account.channel_code,
-                        payment_amount: price,
+                        payment_amount: subscriptionType.price,
                         payment_date: new Date(),
                         subscription_id: userSubscription.id,
                         status_payment: "PENDING",

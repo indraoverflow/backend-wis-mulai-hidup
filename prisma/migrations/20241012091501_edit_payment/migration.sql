@@ -181,6 +181,17 @@ CREATE TABLE "payment" (
     CONSTRAINT "payment_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "subscription_type" (
+    "id" BIGSERIAL NOT NULL,
+    "name" VARCHAR(50) NOT NULL,
+    "price" DECIMAL(10,2) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "subscription_type_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
@@ -197,7 +208,7 @@ CREATE INDEX "role_id_created_at_idx" ON "role"("id", "created_at");
 CREATE INDEX "wedding_reception_id_user_id_created_at_idx" ON "wedding_reception"("id", "user_id", "created_at");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "account_bank_wedding_reception_id_key" ON "account_bank"("wedding_reception_id");
+-- CREATE UNIQUE INDEX "account_bank_wedding_reception_id_key" ON "account_bank"("wedding_reception_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "wedding_ceremony_wedding_reception_id_key" ON "wedding_ceremony"("wedding_reception_id");

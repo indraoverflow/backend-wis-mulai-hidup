@@ -15,5 +15,3 @@ export default async function roleSeed() {
     })
     console.log("Role seed completed");
 }
-
-roleSeed()
