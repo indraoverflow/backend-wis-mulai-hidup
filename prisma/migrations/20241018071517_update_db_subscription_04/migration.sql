@@ -11,10 +11,10 @@ CREATE TYPE "time_zone" AS ENUM ('WIB', 'WITA', 'WIT');
 CREATE TYPE "media_owner" AS ENUM ('man', 'woman');
 
 -- CreateEnum
-CREATE TYPE "expired_status" AS ENUM ('on_process', 'expired', 'active', 'suspend');
+CREATE TYPE "expired_status" AS ENUM ('ON_PROCESS', 'EXPIRED', 'ACTIVE', 'SUSPEND');
 
 -- CreateEnum
-CREATE TYPE "payment_status" AS ENUM ('pending', 'success', 'failed');
+CREATE TYPE "payment_status" AS ENUM ('PENDING', 'SUCCESS', 'FAILED');
 
 -- CreateTable
 CREATE TABLE "user" (
@@ -135,7 +135,7 @@ CREATE TABLE "bride_groom_media" (
     "id" BIGSERIAL NOT NULL,
     "photo_url" VARCHAR(255) NOT NULL,
     "wedding_reception_id" BIGINT,
-    "type"  VARCHAR(50) NOT NULL,
+    "type" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "media_owner" "media_owner" NOT NULL,
@@ -156,11 +156,23 @@ CREATE TABLE "invitation" (
 );
 
 -- CreateTable
+CREATE TABLE "subscription_type" (
+    "id" BIGSERIAL NOT NULL,
+    "name" VARCHAR(50) NOT NULL,
+    "price" INTEGER NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "subscription_type_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "subscription" (
     "id" BIGSERIAL NOT NULL,
     "expired_at" TIMESTAMP(3) NOT NULL,
     "status_subscription" "expired_status" NOT NULL,
     "user_id" BIGINT NOT NULL,
+    "subscription_type_id" BIGINT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -171,25 +183,18 @@ CREATE TABLE "subscription" (
 CREATE TABLE "payment" (
     "id" BIGSERIAL NOT NULL,
     "payment_bank" VARCHAR(50) NOT NULL,
-    "payment_amount" DECIMAL(10,2) NOT NULL,
-    "payment_date" TIMESTAMP(3) NOT NULL,
+    "payment_amount" INTEGER NOT NULL,
+    "payment_date" TIMESTAMP(3),
     "status_payment" "payment_status",
     "subscription_id" BIGINT,
+    "payment_method_id" TEXT,
+    "payment_request_id" TEXT,
+    "virtual_account" TEXT,
+    "limit_payment_date" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "payment_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "subscription_type" (
-    "id" BIGSERIAL NOT NULL,
-    "name" VARCHAR(50) NOT NULL,
-    "price" DECIMAL(10,2) NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "subscription_type_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -206,9 +211,6 @@ CREATE INDEX "role_id_created_at_idx" ON "role"("id", "created_at");
 
 -- CreateIndex
 CREATE INDEX "wedding_reception_id_user_id_created_at_idx" ON "wedding_reception"("id", "user_id", "created_at");
-
--- CreateIndex
--- CREATE UNIQUE INDEX "account_bank_wedding_reception_id_key" ON "account_bank"("wedding_reception_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "wedding_ceremony_wedding_reception_id_key" ON "wedding_ceremony"("wedding_reception_id");
@@ -230,6 +232,9 @@ CREATE INDEX "bride_groom_media_id_wedding_reception_id_created_at_idx" ON "brid
 
 -- CreateIndex
 CREATE INDEX "invitation_id_wedding_reception_id_created_at_idx" ON "invitation"("id", "wedding_reception_id", "created_at");
+
+-- CreateIndex
+CREATE INDEX "subscription_type_id_created_at_idx" ON "subscription_type"("id", "created_at");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "subscription_user_id_key" ON "subscription"("user_id");
@@ -263,6 +268,9 @@ ALTER TABLE "bride_groom_media" ADD CONSTRAINT "bride_groom_media_wedding_recept
 
 -- AddForeignKey
 ALTER TABLE "subscription" ADD CONSTRAINT "subscription_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "subscription" ADD CONSTRAINT "subscription_subscription_type_id_fkey" FOREIGN KEY ("subscription_type_id") REFERENCES "subscription_type"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "payment" ADD CONSTRAINT "payment_subscription_id_fkey" FOREIGN KEY ("subscription_id") REFERENCES "subscription"("id") ON DELETE CASCADE ON UPDATE CASCADE;
