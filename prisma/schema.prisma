@@ -61,31 +61,31 @@ enum time_zone {
 
 model wedding_reception {
   id                BigInt              @id @default(autoincrement())
-  title_reception   String              @db.VarChar(50)
-  name_man          String              @db.VarChar(50)
-  nickname_man      String              @db.VarChar(50)
-  prefix_man        String              @db.VarChar(50)
-  title_man         String              @db.VarChar(50)
+  title_reception   String              
+  name_man          String              
+  nickname_man      String              
+  prefix_man        String              
+  title_man         String              
   birthdate_man     DateTime
-  father_man        String              @db.VarChar(50)
-  mother_man        String              @db.VarChar(50)
-  description_man   String              @db.VarChar(255)
-  prefix_woman      String              @db.VarChar(50)
-  name_woman        String              @db.VarChar(50)
-  nickname_woman    String              @db.VarChar(50)
-  title_woman       String              @db.VarChar(50)
+  father_man        String              
+  mother_man        String              
+  description_man   String
+  prefix_woman      String              
+  name_woman        String              
+  nickname_woman    String              
+  title_woman       String              
   birthdate_woman   DateTime
-  father_woman      String              @db.VarChar(50)
-  mother_woman      String              @db.VarChar(50)
-  description_woman String              @db.VarChar(255)
+  father_woman      String              
+  mother_woman      String              
+  description_woman String
   start_date        DateTime
   end_date          DateTime
   start_time        String
   end_time          String
   time_zone         time_zone
-  location          String              @db.VarChar(100)
-  address           String              @db.VarChar(255)
-  video_url         String              @db.VarChar(255)
+  location          String
+  address           String              
+  video_url         String              
   user_id           BigInt?
   bride_groom_media bride_groom_media[]
   wedding_status    wedding_status

@@ -57,7 +57,8 @@ export default class ReceptionService {
 					wedding_media: true,
 					bride_groom_media: true,
 					wedding_ceremony: true,
-					theme: true
+					theme: true,
+					account_bank: true
 				}
 			})
 			if (!receptionFound) {

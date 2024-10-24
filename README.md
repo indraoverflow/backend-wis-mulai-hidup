@@ -65,21 +65,6 @@ Environment Variables
 
 Create a .env file in the root of the project directory and add the following environment variables:
 
-```bash
-PORT=3000
-DATABASE_URL=postgresql://username:password@localhost:5432/wedding_invitation
-JWT_SECRET=your_jwt_secret_key
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-REDIRECT_URI=http://localhost:3000/auth/google/callback
-
-# EMAIL SMTP CONFIG
-SMTP_HOST=smtp.ethereal.email
-SMTP_PORT=587
-SMTP_USER=daron.bartell@ethereal.email
-SMTP_PASS=H4tDCB7PF3y4kvxa9s
-```
-
 Migration Database
 
 This project uses prism for database management. Do the migration by entering the command into the terminal:
