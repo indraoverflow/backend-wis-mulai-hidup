@@ -6,6 +6,7 @@ import { UpdateUserDto } from "./dto/updateuser.dto"
 const router = Router()
 
 router.get("/", UserJwtVerify.adminVerify, UserController.Getalluser)
+router.get("/info", UserJwtVerify.userVerify, UserController.GetUserInfo)
 router.get("/:id", UserJwtVerify.adminVerify, UserController.Getuserbyid)
 router.patch("/:id", UserJwtVerify.adminVerify, UpdateUserDto, UserController.updateUserbyid)
 router.delete("/:id", UserJwtVerify.adminVerify, UserController.deleteUser)

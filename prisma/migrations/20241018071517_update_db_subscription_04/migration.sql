@@ -95,13 +95,13 @@ CREATE TABLE "account_bank" (
 -- CreateTable
 CREATE TABLE "wedding_ceremony" (
     "id" BIGSERIAL NOT NULL,
-    "title_ceremony" VARCHAR(50) NOT NULL,
+    "title_ceremony" TEXT NOT NULL,
     "start_date" TIMESTAMP(3) NOT NULL,
     "end_date" TIMESTAMP(3) NOT NULL,
     "start_time" TEXT NOT NULL,
     "end_time" TEXT NOT NULL,
-    "location" VARCHAR(100) NOT NULL,
-    "address" VARCHAR(255) NOT NULL,
+    "location" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "wedding_reception_id" BIGINT NOT NULL,
