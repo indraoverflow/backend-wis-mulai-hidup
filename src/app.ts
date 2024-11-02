@@ -13,7 +13,8 @@ import invitationModule from "./modules/invitation/invitation.module"
 import path from "path"
 import paymentModule from "./modules/payment/payment.module"
 import subscribeModule from "./modules/subscribe/subscribe.module"
-
+import cors from "cors"
+import config from "./config/config"
 
 const app = express();
 const limit = ratelimit({
@@ -22,6 +23,12 @@ const limit = ratelimit({
     message: "Too many requests from this IP, please try again later."
 })
 
+const corsOptions = {
+    origin: config.BASE_URL,
+    credentials: true
+}
+
+app.use(cors(corsOptions))
 app.use('/wedding_media', express.static(path.join(__dirname, 'assets', 'wedding_media')));
 const csrfProtection = csurf({ cookie: true })
 
