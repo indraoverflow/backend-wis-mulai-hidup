@@ -13,6 +13,8 @@ import invitationModule from "./modules/invitation/invitation.module"
 import path from "path"
 import paymentModule from "./modules/payment/payment.module"
 import subscribeModule from "./modules/subscribe/subscribe.module"
+import guestMessageModule from './modules/guest_message/guest_message.module'
+
 import cors from "cors"
 import config from "./config/config"
 
@@ -54,6 +56,7 @@ weddingThemeModule(app);
 invitationModule(app);
 paymentModule(app);
 subscribeModule(app);
+guestMessageModule(app);
 /* ROUTES Modules*/
 
 

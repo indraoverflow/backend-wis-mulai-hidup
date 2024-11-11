@@ -42,6 +42,7 @@ model role {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   users      user[]
+
   @@index([id, created_at])
 }
 
@@ -61,22 +62,22 @@ enum time_zone {
 
 model wedding_reception {
   id                BigInt              @id @default(autoincrement())
-  title_reception   String              
-  name_man          String              
-  nickname_man      String              
-  prefix_man        String              
-  title_man         String              
+  title_reception   String
+  name_man          String
+  nickname_man      String
+  prefix_man        String
+  title_man         String
   birthdate_man     DateTime
-  father_man        String              
-  mother_man        String              
+  father_man        String
+  mother_man        String
   description_man   String
-  prefix_woman      String              
-  name_woman        String              
-  nickname_woman    String              
-  title_woman       String              
+  prefix_woman      String
+  name_woman        String
+  nickname_woman    String
+  title_woman       String
   birthdate_woman   DateTime
-  father_woman      String              
-  mother_woman      String              
+  father_woman      String
+  mother_woman      String
   description_woman String
   start_date        DateTime
   end_date          DateTime
@@ -84,14 +85,15 @@ model wedding_reception {
   end_time          String
   time_zone         time_zone
   location          String
-  address           String              
-  video_url         String              
+  address           String
+  video_url         String
   user_id           BigInt?
   bride_groom_media bride_groom_media[]
   wedding_status    wedding_status
   wedding_ceremony  wedding_ceremony?
   user              user?               @relation(fields: [user_id], references: [id], onDelete: Cascade)
   account_bank      account_bank[]
+  guest_message     guest_message[]
   created_at        DateTime            @default(now())
   updated_at        DateTime            @updatedAt
   theme_id          BigInt
@@ -108,19 +110,19 @@ model account_bank {
   bank                 String            @db.VarChar(255)
   created_at           DateTime          @default(now())
   updated_at           DateTime          @updatedAt
-  wedding_reception_id BigInt            
+  wedding_reception_id BigInt
   wedding_reception    wedding_reception @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
 }
 
 model wedding_ceremony {
   id                   BigInt            @id @default(autoincrement())
-  title_ceremony       String           
+  title_ceremony       String
   start_date           DateTime
   end_date             DateTime
   start_time           String
   end_time             String
-  location             String            
-  address              String            
+  location             String
+  address              String
   created_at           DateTime          @default(now())
   updated_at           DateTime          @updatedAt
   wedding_reception_id BigInt            @unique
@@ -175,8 +177,21 @@ model invitation {
   wedding_reception_id BigInt?
   created_at           DateTime @default(now())
   updated_at           DateTime @updatedAt
-
+  guest_message        guest_message[]
   @@index([id, wedding_reception_id, created_at])
+}
+
+model guest_message {
+  id                   BigInt             @id @default(autoincrement())
+  message              String
+  wedding_reception_id BigInt?
+  invitation_id BigInt?
+  created_at           DateTime           @default(now())
+  updated_at           DateTime           @updatedAt
+  wedding_reception    wedding_reception? @relation(fields: [wedding_reception_id], references: [id]) 
+  invitation    invitation? @relation(fields: [invitation_id], references: [id]) 
+
+  @@index([id, invitation_id, wedding_reception_id, created_at])
 }
 
 enum expired_status {
@@ -187,12 +202,13 @@ enum expired_status {
 }
 
 model subscription_type {
-  id                   BigInt            @id @default(autoincrement())
-  name                 String            @db.VarChar(50)
-  price                Int               @db.Integer
-  created_at           DateTime          @default(now())
-  updated_at           DateTime          @updatedAt
-  subscription         subscription[]
+  id           BigInt         @id @default(autoincrement())
+  name         String         @db.VarChar(50)
+  price        Int            @db.Integer
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  subscription subscription[]
+
   @@index([id, created_at])
 }
 
@@ -207,6 +223,7 @@ model subscription {
   subscription_type    subscription_type @relation(fields: [subscription_type_id], references: [id], onDelete: Cascade)
   created_at           DateTime          @default(now())
   updated_at           DateTime          @updatedAt
+
   @@index([id, user_id, created_at])
 }
 
@@ -217,18 +234,19 @@ enum payment_status {
 }
 
 model payment {
-  id              BigInt          @id @default(autoincrement())
-  payment_bank    String          @db.VarChar(50)
-  payment_amount  Int             @db.Integer
-  payment_date    DateTime?
-  status_payment  payment_status?
-  subscription_id BigInt?
-  subscription    subscription?   @relation(fields: [subscription_id], references: [id], onDelete: Cascade)
-  payment_method_id String?
+  id                 BigInt          @id @default(autoincrement())
+  payment_bank       String          @db.VarChar(50)
+  payment_amount     Int             @db.Integer
+  payment_date       DateTime?
+  status_payment     payment_status?
+  subscription_id    BigInt?
+  subscription       subscription?   @relation(fields: [subscription_id], references: [id], onDelete: Cascade)
+  payment_method_id  String?
   payment_request_id String?
   virtual_account    String?
   limit_payment_date DateTime?
   created_at         DateTime        @default(now())
   updated_at         DateTime        @updatedAt
+
   @@index([id, subscription_id, created_at])
 }
