@@ -6,7 +6,7 @@ export default async function main() {
     await prisma.user.create({
         data: {
             name: "admin",
-            email: "admin@gmail.com",
+            email: "admin1@gmail.com",
             password: "admin",
             role_id: 2,
         }

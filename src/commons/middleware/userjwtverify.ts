@@ -114,9 +114,8 @@ export default class UserJwtVerify {
     }
 
     static async refreshTokenVerify(req: Request, res: Response, next: NextFunction) {
-        const csrf_token = req.cookies["x-xsrf-token"]
         const refreshToken = req.cookies.refresh_token
-        if (!refreshToken || csrf_token) return res.status(401).json({ message: 'Unauthorized' });
+        if (!refreshToken ) return res.status(401).json({ message: 'Unauthorized' });
         try {
             const user = await UserJwtVerify.prisma.user.findFirst({
                 where: {

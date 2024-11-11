@@ -14,6 +14,7 @@ import path from "path"
 import paymentModule from "./modules/payment/payment.module"
 import subscribeModule from "./modules/subscribe/subscribe.module"
 import guestMessageModule from './modules/guest_message/guest_message.module'
+import guestModule from "./modules/guest/guest.module"
 
 import cors from "cors"
 import config from "./config/config"
@@ -57,6 +58,7 @@ invitationModule(app);
 paymentModule(app);
 subscribeModule(app);
 guestMessageModule(app);
+guestModule(app)
 /* ROUTES Modules*/
 
 
