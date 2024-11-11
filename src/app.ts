@@ -13,6 +13,7 @@ import invitationModule from "./modules/invitation/invitation.module"
 import path from "path"
 import paymentModule from "./modules/payment/payment.module"
 import subscribeModule from "./modules/subscribe/subscribe.module"
+import guestModule from "./modules/guest/guest.module"
 
 
 const app = express();
@@ -47,6 +48,7 @@ weddingThemeModule(app);
 invitationModule(app);
 paymentModule(app);
 subscribeModule(app);
+guestModule(app)
 /* ROUTES Modules*/
 
 

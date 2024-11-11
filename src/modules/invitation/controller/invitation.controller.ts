@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import AsyncHandler from "../../../commons/utils/asynhandler";
 import InvitationService from "../services/invitation.service";
-import { error } from "console";
 
 
 export default class InvitationController extends AsyncHandler {

@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { InvitationType } from "../types/invitation.type";
-import { error } from "console";
 
 export default class InvitationService {
 	private static prisma: PrismaClient = new PrismaClient();
