@@ -4,13 +4,13 @@ import { GuestMessageType } from "../types/guest_message.type";
 export default class GuestMessageService {
     private static prisma: PrismaClient = new PrismaClient();
 
-    static async createMessageByGuestService(invitation_id: String, payload: GuestMessageType) {
-        const guestInvitationFound = await this.prisma.invitation.findUnique({
-            where: {id: +invitation_id}
+    static async createMessageByGuestService(guest_invitation_id: String, payload: GuestMessageType) {
+        const guestInvitationFound = await this.prisma.guest_invitation.findUnique({
+            where: {id: +guest_invitation_id}
         })
         const messages = await this.prisma.guest_message.create({
             data: {
-                invitation_id,
+                guest_invitation_id: +guest_invitation_id,
                 wedding_reception_id: guestInvitationFound?.wedding_reception_id,
                 message: payload.message,
                 name: payload.name
@@ -20,9 +20,10 @@ export default class GuestMessageService {
     }
 
     static async getAllReceptionMessageService(reception_id: String) {
+        console.log(reception_id, '<<<< reception')
         const messages = await this.prisma.guest_message.findMany({
             where: {
-                reception_id
+                wedding_reception_id: reception_id
             }
         })
         return messages

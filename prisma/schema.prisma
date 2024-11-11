@@ -170,28 +170,17 @@ model bride_groom_media {
   @@index([id, wedding_reception_id, created_at])
 }
 
-model invitation {
-  id                   BigInt   @id @default(autoincrement())
-  name                 String   @db.VarChar(255)
-  phone_number         String   @db.VarChar(255)
-  wedding_reception_id BigInt?
-  created_at           DateTime @default(now())
-  updated_at           DateTime @updatedAt
-  guest_message        guest_message[]
-  @@index([id, wedding_reception_id, created_at])
-}
-
 model guest_message {
   id                   BigInt             @id @default(autoincrement())
   message              String
   wedding_reception_id BigInt?
-  invitation_id BigInt?
+  guest_invitation_id BigInt?
   created_at           DateTime           @default(now())
   updated_at           DateTime           @updatedAt
   wedding_reception    wedding_reception? @relation(fields: [wedding_reception_id], references: [id]) 
-  invitation    invitation? @relation(fields: [invitation_id], references: [id]) 
+  guest_invitation    guest_invitation? @relation(fields: [guest_invitation_id], references: [id]) 
 
-  @@index([id, invitation_id, wedding_reception_id, created_at])
+  @@index([id, guest_invitation_id, wedding_reception_id, created_at])
 }
 
 enum expired_status {
@@ -254,6 +243,7 @@ model payment {
 enum attendance_status {
   HADIR
   TIDAK_HADIR
+  MUNGKIN_HADIR
 }
 
 model guest_invitation {
@@ -265,4 +255,5 @@ model guest_invitation {
     updated_at DateTime @updatedAt
     wedding_reception_id BigInt
     wedding_reception  wedding_reception @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
+    guest_message        guest_message[]
 }

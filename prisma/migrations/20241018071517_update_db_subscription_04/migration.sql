@@ -137,7 +137,7 @@ CREATE TABLE "guest_message" (
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "wedding_reception_id" BIGINT,
-    "invitation_id" BIGINT,
+    "guest_invitation_id" BIGINT,
     CONSTRAINT "guest_message_pkey" PRIMARY KEY ("id")
 );
 
@@ -152,18 +152,6 @@ CREATE TABLE "bride_groom_media" (
     "media_owner" "media_owner" NOT NULL,
 
     CONSTRAINT "bride_groom_media_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "invitation" (
-    "id" BIGSERIAL NOT NULL,
-    "name" VARCHAR(255) NOT NULL,
-    "phone_number" VARCHAR(255) NOT NULL,
-    "wedding_reception_id" BIGINT,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "invitation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -242,9 +230,6 @@ CREATE INDEX "wedding_media_id_wedding_reception_id_created_at_idx" ON "wedding_
 CREATE INDEX "bride_groom_media_id_wedding_reception_id_created_at_idx" ON "bride_groom_media"("id", "wedding_reception_id", "created_at");
 
 -- CreateIndex
-CREATE INDEX "invitation_id_wedding_reception_id_created_at_idx" ON "invitation"("id", "wedding_reception_id", "created_at");
-
--- CreateIndex
 CREATE INDEX "subscription_type_id_created_at_idx" ON "subscription_type"("id", "created_at");
 
 -- CreateIndex
@@ -279,9 +264,6 @@ ALTER TABLE "bride_groom_media" ADD CONSTRAINT "bride_groom_media_wedding_recept
 
 -- AddForeignKey
 ALTER TABLE "guest_message" ADD CONSTRAINT "guest_message_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "guest_message" ADD CONSTRAINT "guest_message_invitation_id_fkey" FOREIGN KEY ("invitation_id") REFERENCES "invitation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "subscription" ADD CONSTRAINT "subscription_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;

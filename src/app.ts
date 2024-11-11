@@ -9,7 +9,6 @@ import themeModule from "./modules/theme/theme.module";
 import receptionModule from "./modules/wedding_reception/reception.module"
 import ratelimit from "express-rate-limit"
 import weddingThemeModule from "./modules/wedding_theme/wedding_theme.module"
-import invitationModule from "./modules/invitation/invitation.module"
 import path from "path"
 import paymentModule from "./modules/payment/payment.module"
 import subscribeModule from "./modules/subscribe/subscribe.module"
@@ -54,7 +53,6 @@ adminModule(app);
 themeModule(app);
 receptionModule(app);
 weddingThemeModule(app);
-invitationModule(app);
 paymentModule(app);
 subscribeModule(app);
 guestMessageModule(app);

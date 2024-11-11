@@ -1,5 +1,5 @@
 export type GuestMessageType = {
-    message: String,
-    status: String,
-    name: String
+    message: string,
+    status: string,
+    name: string
 }

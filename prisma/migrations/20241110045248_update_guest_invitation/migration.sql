@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "attendance_status" AS ENUM ('HADIR', 'TIDAK_HADIR');
+CREATE TYPE "attendance_status" AS ENUM ('HADIR', 'TIDAK_HADIR', 'MUNGKIN_HADIR');
 
 -- CreateTable
 CREATE TABLE "guest_invitation" (
@@ -16,3 +16,7 @@ CREATE TABLE "guest_invitation" (
 
 -- AddForeignKey
 ALTER TABLE "guest_invitation" ADD CONSTRAINT "guest_invitation_wedding_reception_id_fkey" FOREIGN KEY ("wedding_reception_id") REFERENCES "wedding_reception"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+-- AddForeignKey
+ALTER TABLE "guest_message" ADD CONSTRAINT "guest_message_guest_invitation_id_fkey" FOREIGN KEY ("guest_invitation_id") REFERENCES "guest_invitation"("id") ON DELETE CASCADE ON UPDATE CASCADE;
