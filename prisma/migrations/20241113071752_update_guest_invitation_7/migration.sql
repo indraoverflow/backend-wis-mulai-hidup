@@ -6,7 +6,7 @@
 */
 -- AlterEnum
 BEGIN;
-CREATE TYPE "attendance_status_new" AS ENUM ('YES', 'NO');
+CREATE TYPE "attendance_status_new" AS ENUM ('YES', 'NO', 'MAYBE');
 ALTER TABLE "guest_invitation" ALTER COLUMN "status" TYPE "attendance_status_new" USING ("status"::text::"attendance_status_new");
 ALTER TYPE "attendance_status" RENAME TO "attendance_status_old";
 ALTER TYPE "attendance_status_new" RENAME TO "attendance_status";

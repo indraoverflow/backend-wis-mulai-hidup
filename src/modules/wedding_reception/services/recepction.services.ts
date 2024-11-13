@@ -3,6 +3,7 @@ import { ReceptionType } from "../types/recepction.type";
 import { WeddingCeremonyType } from "../../wedding_ceremony/types/wedding_ceremony.types";
 import { WeddingMediaType } from "../types/wedding_media.type";
 import { BrideGroomMediaType } from "../types/bridge_groom_media.type";
+import UniqID from "short-unique-id"
 
 export default class ReceptionService {
 	private static prisma: PrismaClient = new PrismaClient();
@@ -86,6 +87,7 @@ export default class ReceptionService {
   
 	static async createReceptionService(user_id: number, data: ReceptionType, theme_id: number, wedding_ceremony: WeddingCeremonyType, account_bank: any) {
 		try {
+			const unid = new UniqID({length:10})
 			const receptionT = await this.prisma.$transaction(async (prisma) => {
 				const reception = await prisma.wedding_reception.create({
 					data: {
@@ -117,9 +119,11 @@ export default class ReceptionService {
 						user_id: user_id,
 						theme_id: theme_id,
 						wedding_status: "scheduled",
+						unique_id : unid.rnd(),
 					},
 					select: {
-						id: true
+						id: true,
+						unique_id: true
 					}
 				});
 
@@ -147,14 +151,13 @@ export default class ReceptionService {
 
 				return reception; 
 			});
-
 			return {
 				status: 201,
 				message: "Create invitation reception successfully",
-				receptionId: receptionT.id
+				receptionId: receptionT.id,
+				uniqueId: receptionT.unique_id
 			};
 		} catch (error) {
-			console.log(error, '<<<<<')
 			throw {
 				message: "ISE",
 				status: 500
