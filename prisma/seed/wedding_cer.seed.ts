@@ -9,6 +9,8 @@ export default async function main() {
             title_ceremony: "sakura",
             address: "sakura",
             location: "sakura",
+            start_time: "10:00",
+            end_time: "11:00",
             start_date: new Date(),
             end_date: new Date(),
             wedding_reception_id: wedding_reception[0].id,

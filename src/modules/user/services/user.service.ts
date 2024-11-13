@@ -18,6 +18,15 @@ export default class UserService {
         return user
     }
 
+    static async getUserInfoService(id: number) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id: id
+            },
+        })
+        return user
+    }
+
     static async getUseridService(id: number) {
         const user = await this.prisma.user.findUnique({
             where: {

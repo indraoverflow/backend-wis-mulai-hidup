@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/server.ts",
   "scripts": {
-    "start": "node ./dist/server.js",
+    "start": "node ./dist/src/server.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "npx tsc",
     "prod": "npm run build && npm run start",
@@ -24,12 +24,16 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
     "@types/csurf": "^1.11.5",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/moment": "^2.13.0",
     "@types/morgan": "^1.9.9",
+    "@types/nanoid": "^3.0.0",
     "@types/node": "^22.5.2",
     "@types/nodemailer": "^6.4.15",
+    "@types/uuid": "^10.0.0",
     "prisma": "^5.19.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
@@ -39,6 +43,7 @@
     "@prisma/client": "^5.19.1",
     "@types/express-rate-limit": "^6.0.0",
     "@types/multer": "^1.4.12",
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -49,8 +54,12 @@
     "express-validator": "^7.2.0",
     "googleapis": "^143.0.0",
     "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.15"
+    "nodemailer": "^6.9.15",
+    "short-unique-id": "^5.2.0",
+    "uuid": "^10.0.0",
+    "xendit-node": "^6.0.0"
   }
 }

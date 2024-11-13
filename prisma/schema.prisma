@@ -61,47 +61,69 @@ enum time_zone {
 }
 
 model wedding_reception {
-  id                      BigInt                    @id @default(autoincrement())
-  title_reception         String                    @db.VarChar(50)
-  name_man                String                    @db.VarChar(50)
-  prefix_man              String                    @db.VarChar(50)
-  title_man               String                    @db.VarChar(50)
-  father_man              String                    @db.VarChar(50)
-  mother_man              String                    @db.VarChar(50)
-  description_man         String                    @db.VarChar(255)
-  prefix_woman             String                    @db.VarChar(50)
-  name_woman              String                    @db.VarChar(50)
-  title_woman             String                    @db.VarChar(50)
-  father_woman            String                    @db.VarChar(50)
-  mother_woman            String                    @db.VarChar(50)
-  description_woman       String                    @db.VarChar(255)
-  start_date              DateTime
-  end_date                DateTime
-  time                    String
-  time_zone               time_zone
-  location                String                    @db.VarChar(100)
-  address                 String                    @db.VarChar(255)
-  user_id                 BigInt?
-  wedding_media           wedding_media[]
-  bride_groom_media       bride_groom_media[]
-  wedding_status          wedding_status
-  wedding_ceremony        wedding_ceremony?
-  user                    user?                     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  created_at              DateTime                  @default(now())
-  updated_at              DateTime                  @updatedAt
-  theme_id                BigInt
-  theme                   theme                     @relation(fields: [theme_id], references: [id], onDelete: Cascade)
-
+  id                BigInt              @id @default(autoincrement())
+  unique_id         String              @db.VarChar(50) @unique
+  title_reception   String
+  name_man          String
+  nickname_man      String
+  prefix_man        String
+  title_man         String
+  birthdate_man     DateTime
+  father_man        String
+  mother_man        String
+  description_man   String
+  prefix_woman      String
+  name_woman        String
+  nickname_woman    String
+  title_woman       String
+  birthdate_woman   DateTime
+  father_woman      String
+  mother_woman      String
+  description_woman String
+  start_date        DateTime
+  end_date          DateTime
+  start_time        String
+  end_time          String
+  time_zone         time_zone
+  location          String
+  address           String
+  video_url         String
+  user_id           BigInt?
+  bride_groom_media bride_groom_media[]
+  wedding_status    wedding_status
+  wedding_ceremony  wedding_ceremony?
+  user              user?               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  account_bank      account_bank[]
+  guest_message     guest_message[]
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  theme_id          BigInt
+  theme             theme               @relation(fields: [theme_id], references: [id], onDelete: Cascade)
+  wedding_media     wedding_media[]
+  guest_invitation guest_invitation[]
   @@index([id, user_id, created_at])
+}
+
+model account_bank {
+  id                   BigInt            @id @default(autoincrement())
+  name                 String            @db.VarChar(255)
+  number               String            @db.VarChar(100)
+  bank                 String            @db.VarChar(255)
+  created_at           DateTime          @default(now())
+  updated_at           DateTime          @updatedAt
+  wedding_reception_id BigInt
+  wedding_reception    wedding_reception @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
 }
 
 model wedding_ceremony {
   id                   BigInt            @id @default(autoincrement())
-  title_ceremony       String            @db.VarChar(50)
+  title_ceremony       String
   start_date           DateTime
   end_date             DateTime
-  location             String            @db.VarChar(100)
-  address              String            @db.VarChar(255)
+  start_time           String
+  end_time             String
+  location             String
+  address              String
   created_at           DateTime          @default(now())
   updated_at           DateTime          @updatedAt
   wedding_reception_id BigInt            @unique
@@ -111,11 +133,11 @@ model wedding_ceremony {
 }
 
 model theme {
-  id         BigInt   @id @default(autoincrement())
-  theme_name String   @unique @db.VarChar(50)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  wedding_receptions  wedding_reception[]
+  id                 BigInt              @id @default(autoincrement())
+  theme_name         String              @unique @db.VarChar(50)
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @updatedAt
+  wedding_receptions wedding_reception[]
 
   @@index([id, created_at])
 }
@@ -137,64 +159,104 @@ enum media_owner {
 }
 
 model bride_groom_media {
-  id                   BigInt   @id @default(autoincrement())
-  photo_url            String   @db.VarChar(255)
+  id                   BigInt             @id @default(autoincrement())
+  photo_url            String             @db.VarChar(255)
   wedding_reception_id BigInt?
   wedding_reception    wedding_reception? @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
-  created_at           DateTime @default(now())
-  updated_at           DateTime @updatedAt
+  type                 String
+  created_at           DateTime           @default(now())
+  updated_at           DateTime           @updatedAt
   media_owner          media_owner
 
   @@index([id, wedding_reception_id, created_at])
 }
 
-model invitation {
-  id                   BigInt   @id @default(autoincrement())
-  name                 String   @db.VarChar(255)
-  phone_number         String   @db.VarChar(255)
-  wedding_reception_id BigInt?
-  created_at           DateTime @default(now())
-  updated_at           DateTime @updatedAt
+model guest_message {
+  id                   BigInt             @id @default(autoincrement())
+  message              String
+  name                 String
+  wedding_unique_id String
+  guest_unique_id String
+  created_at           DateTime           @default(now())
+  updated_at           DateTime           @updatedAt
+  wedding_reception    wedding_reception? @relation(fields: [wedding_unique_id], references: [unique_id]) 
+  guest_invitation    guest_invitation? @relation(fields: [guest_unique_id], references: [unique_id]) 
 
-  @@index([id, wedding_reception_id, created_at])
+  @@index([id, guest_unique_id, wedding_unique_id, created_at])
 }
 
 enum expired_status {
-  on_process
-  expired
-  active
-  suspend
+  ON_PROCESS
+  EXPIRED
+  ACTIVE
+  SUSPEND
+}
+
+model subscription_type {
+  id           BigInt         @id @default(autoincrement())
+  name         String         @db.VarChar(50)
+  price        Int            @db.Integer
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  subscription subscription[]
+
+  @@index([id, created_at])
 }
 
 model subscription {
-  id                  BigInt         @id @default(autoincrement())
-  expired_at          DateTime
-  status_subscription expired_status
-  user_id             BigInt         @unique
-  user                user           @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  payment             payment[]
-  created_at          DateTime       @default(now())
-  updated_at          DateTime       @updatedAt
+  id                   BigInt            @id @default(autoincrement())
+  expired_at           DateTime
+  status_subscription  expired_status
+  user_id              BigInt            @unique
+  user                 user              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  payment              payment[]
+  subscription_type_id BigInt
+  subscription_type    subscription_type @relation(fields: [subscription_type_id], references: [id], onDelete: Cascade)
+  created_at           DateTime          @default(now())
+  updated_at           DateTime          @updatedAt
 
   @@index([id, user_id, created_at])
 }
 
 enum payment_status {
-  pending
-  success
-  failed
+  PENDING
+  SUCCESS
+  FAILED
 }
 
 model payment {
-  id              BigInt          @id @default(autoincrement())
-  payment_method  String          @db.VarChar(50)
-  payment_amount  Decimal         @db.Decimal(10, 2)
-  payment_date    DateTime
-  status_payment  payment_status?
-  subscription_id BigInt?
-  subscription    subscription?   @relation(fields: [subscription_id], references: [id], onDelete: SetNull)
-  created_at      DateTime        @default(now())
-  updated_at      DateTime        @updatedAt
+  id                 BigInt          @id @default(autoincrement())
+  payment_bank       String          @db.VarChar(50)
+  payment_amount     Int             @db.Integer
+  payment_date       DateTime?
+  status_payment     payment_status?
+  subscription_id    BigInt?
+  subscription       subscription?   @relation(fields: [subscription_id], references: [id], onDelete: Cascade)
+  payment_method_id  String?
+  payment_request_id String?
+  virtual_account    String?
+  limit_payment_date DateTime?
+  created_at         DateTime        @default(now())
+  updated_at         DateTime        @updatedAt
 
   @@index([id, subscription_id, created_at])
+}
+
+enum attendance_status {
+  YES
+  NO
+  MAYBE
+}
+
+model guest_invitation {
+    id BigInt @id @default(autoincrement())
+    unique_id String @db.VarChar(50) @unique
+    name String @db.VarChar(255)
+    phone_number String @db.VarChar(13)
+    status  attendance_status?
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    wedding_unique_id String
+    wedding_reception  wedding_reception @relation(fields: [wedding_unique_id], references: [unique_id], onDelete: Cascade)
+    guest_message        guest_message[]
 }

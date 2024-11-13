@@ -37,7 +37,7 @@ export default class AuthController extends AsyncHandler {
     })
 
     static register = this.handleRequest(async (req: Request, res: Response) => {
-
+        console.log('lewat')
         const body = req.body;
         const response = await AuthService.registerService(body)
 

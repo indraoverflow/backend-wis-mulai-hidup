@@ -18,6 +18,16 @@ export default class UserController extends AsyncHandler {
 
     })
 
+    static GetUserInfo = this.handleRequest(async (req: Request, res: Response) => {
+        const {user_id} = req.headers
+        const response = await UserService.getUserInfoService(+user_id!)
+        return {
+            status: 200,
+            message: "Get user info successfully",
+            data: response
+        }
+    })
+
     static Getuserbyid = this.handleRequest(async (req: Request, res: Response) => {
         const id = req.params.id
         const response = await UserService.getUseridService(+id)
