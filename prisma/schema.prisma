@@ -61,6 +61,7 @@ enum time_zone {
 
 model wedding_reception {
   id                BigInt              @id @default(autoincrement())
+  unique_id         String              @db.VarChar(50) @unique
   title_reception   String              @db.VarChar(50)
   name_man          String              @db.VarChar(50)
   nickname_man      String              @db.VarChar(50)
@@ -234,17 +235,18 @@ model payment {
 }
 
 enum attendance_status {
-  HADIR
-  TIDAK_HADIR
+  YES
+  NO
 }
 
 model guest_invitation {
     id BigInt @id @default(autoincrement())
+    unique_id String @db.VarChar(50) @unique
     name String @db.VarChar(255)
     phone_number String @db.VarChar(13)
     status  attendance_status?
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
-    wedding_reception_id BigInt
-    wedding_reception  wedding_reception @relation(fields: [wedding_reception_id], references: [id], onDelete: Cascade)
+    wedding_unique_id String
+    wedding_reception  wedding_reception @relation(fields: [wedding_unique_id], references: [unique_id], onDelete: Cascade)
 }

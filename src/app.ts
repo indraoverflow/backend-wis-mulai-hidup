@@ -19,7 +19,7 @@ import guestModule from "./modules/guest/guest.module"
 const app = express();
 const limit = ratelimit({
     windowMs: 10 * 60 * 1000,
-    max: 100,
+    max: 20,
     message: "Too many requests from this IP, please try again later."
 })
 

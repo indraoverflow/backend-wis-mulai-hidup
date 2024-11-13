@@ -1,8 +1,10 @@
 import { PrismaClient } from "@prisma/client";
+import UniqueId from "short-unique-id"
 
 const prisma = new PrismaClient();
 
 export default async function main() {
+    const unid = new UniqueId({length:10})
     const theme = await prisma.theme.findFirst({
         where: {
             id: 1,
@@ -11,6 +13,7 @@ export default async function main() {
 
     await prisma.wedding_reception.create({
         data: {
+            unique_id : unid.rnd(),
             title_reception: "sakura",
             start_date: new Date(),
             end_date: new Date(),
