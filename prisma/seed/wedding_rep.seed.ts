@@ -46,3 +46,5 @@ export default async function main() {
     });
     console.log("Wedding reception seed completed");
 }
+
+main()

@@ -158,7 +158,6 @@ export default class ReceptionService {
 				uniqueId: receptionT.unique_id
 			};
 		} catch (error) {
-			console.log(error, '<<<<<')
 			throw {
 				message: "ISE",
 				status: 500
