@@ -5,8 +5,9 @@ export default class GuestMessageService {
     private static prisma: PrismaClient = new PrismaClient();
 
     static async createMessageByGuestService(guest_invitation_id: String, payload: GuestMessageType) {
-        const guestInvitationFound = await this.prisma.guest_invitation.findUnique({
-            where: {id: +guest_invitation_id}
+        const guestInvitationFound = await this.prisma.guest_invitation.update({
+            where: {id: +guest_invitation_id},
+            data: {status: payload.status}
         })
         const messages = await this.prisma.guest_message.create({
             data: {
