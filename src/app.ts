@@ -21,7 +21,7 @@ import config from "./config/config"
 const app = express();
 const limit = ratelimit({
     windowMs: 10 * 60 * 1000,
-    max: 100,
+    max: 20,
     message: "Too many requests from this IP, please try again later."
 })
 
