@@ -10,3 +10,6 @@ ALTER TABLE "guest_invitation" ADD COLUMN     "unique_id" VARCHAR(50) NOT NULL;
 
 -- CreateIndex
 CREATE UNIQUE INDEX "guest_invitation_unique_id_key" ON "guest_invitation"("unique_id");
+
+-- AddForeignKey
+ALTER TABLE "guest_message" ADD CONSTRAINT "guest_message_guest_unique_id_fkey" FOREIGN KEY ("guest_unique_id") REFERENCES "guest_invitation"("unique_id") ON DELETE CASCADE ON UPDATE CASCADE;

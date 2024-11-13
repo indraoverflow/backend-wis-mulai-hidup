@@ -6,7 +6,7 @@
 
 */
 -- AlterTable
-ALTER TABLE "wedding_reception" ADD COLUMN     "unique_id" VARCHAR(50) NOT NULL;
+-- ALTER TABLE "wedding_reception" ADD COLUMN  "unique_id" VARCHAR(50) NOT NULL;
 
 -- CreateIndex
-CREATE UNIQUE INDEX "wedding_reception_unique_id_key" ON "wedding_reception"("unique_id");
+-- CREATE UNIQUE INDEX "wedding_reception_unique_id_key" ON "wedding_reception"("unique_id");

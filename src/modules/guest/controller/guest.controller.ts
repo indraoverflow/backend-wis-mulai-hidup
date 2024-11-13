@@ -22,7 +22,7 @@ export default class GuestController extends AsyncHandler {
         const guest = result.map((data)=>{
             return {
                 ...data,
-                share_link : `${req.protocol}://${req.get("host")}/guest?to=${data.unique_id}`
+                share_link : `${req.protocol}://${req.get("host")}/${data.wedding_unique_id}?to=${data.unique_id}`
             }
         })
         return {
