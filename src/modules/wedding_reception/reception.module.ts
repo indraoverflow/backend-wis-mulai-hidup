@@ -16,8 +16,8 @@ router.patch("/status/complete/:id", UserJwtVerify.adminVerify, ReceptionControl
 router.patch("/status/in_progress/:id", UserJwtVerify.adminVerify, ReceptionController.UpdateInProgressReception)
 
 router.get("/user/:id", ReceptionController.GetReceptionByUser)
-router.post('/create', CreateInvitation.SubscriptionCheck,UserJwtVerify.userVerify, ReceptionController.CreateReception)
-// router.post('/create', UserJwtVerify.userVerify, ReceptionController.CreateReception)
+// router.post('/create', CreateInvitation.SubscriptionCheck,UserJwtVerify.userVerify, ReceptionController.CreateReception)
+router.post('/create', UserJwtVerify.userVerify, ReceptionController.CreateReception)
 router.post('/upload_media/:receptionId', UserJwtVerify.userVerify, uploadMultiple, ReceptionController.UploadReceptionMedia)
 
 export default (app: Router) => {
