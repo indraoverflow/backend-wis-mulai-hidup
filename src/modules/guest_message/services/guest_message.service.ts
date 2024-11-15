@@ -24,7 +24,17 @@ export default class GuestMessageService {
         const messages = await this.prisma.guest_message.findMany({
             where: {
                 wedding_unique_id: wedding_unique_id
-            }
+            },
+            include: {
+                guest_invitation: {
+                    select: {
+                        id: true,
+                        unique_id: true,
+                        name: true,
+                        status: true
+                    }
+                }
+            },
         })
         return messages
     }
