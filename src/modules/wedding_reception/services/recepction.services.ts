@@ -64,7 +64,24 @@ export default class ReceptionService {
 					account_bank: true
 				}
 			})
-			return reception
+			if (!reception) {
+				throw {
+					message: "RECEPTION_NOT_FOUND",
+					status: 404
+				}
+			}
+			const formattedReception = {
+				...reception,
+				woman_media: reception.bride_groom_media?.filter((item) => item.media_owner === 'woman' && item.type == 'personal'),
+				man_media: reception.bride_groom_media?.filter((item) => item.media_owner === 'man' && item.type == 'personal'),
+				man_story: reception.bride_groom_media?.filter((item) => item.media_owner === 'man' && item.type == 'story'),
+				woman_story: reception.bride_groom_media?.filter((item) => item.media_owner === 'woman' && item.type == 'story'),
+			}
+			return {
+				status: 200,
+				message: "Get one reception successfully",
+				data: formattedReception
+			}
 		} catch (error) {
 			return error
 		}
