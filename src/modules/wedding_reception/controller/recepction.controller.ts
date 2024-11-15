@@ -30,9 +30,15 @@ export default class ReceptionController extends AsyncHandler {
 		return response
 	})
 
+	static GetOneReceptionByUid = this.handleRequest(async (req: Request, res: Response) => {
+		const {unique_id} = req.params
+		const response = await ReceptionService.getReceptionByUidService(unique_id)
+		return response
+	})
+
 	static GetOneReception = this.handleRequest(async (req: Request, res: Response) => {
 		const {id} = req.params
-		const response = await ReceptionService.getOneRecpetionService(+id)
+		const response = await ReceptionService.getOneReceptionService(+id)
 		return response
 	})
 

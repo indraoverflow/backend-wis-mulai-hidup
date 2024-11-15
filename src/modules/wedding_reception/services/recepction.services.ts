@@ -50,7 +50,27 @@ export default class ReceptionService {
 		}
 	}
 
-	static async getOneRecpetionService(id: number) {
+	static async getReceptionByUidService(unique_id: string) {
+		try {
+			const reception = await this.prisma.wedding_reception.findUnique({
+				where: {
+					unique_id: unique_id
+				},
+				include: {
+					wedding_media: true,
+					bride_groom_media: true,
+					wedding_ceremony: true,
+					theme: true,
+					account_bank: true
+				}
+			})
+			return reception
+		} catch (error) {
+			return error
+		}
+	}
+
+	static async getOneReceptionService(id: number) {
 		try {	
 			const receptionFound = await this.prisma.wedding_reception.findUnique({
 				where: { id },
