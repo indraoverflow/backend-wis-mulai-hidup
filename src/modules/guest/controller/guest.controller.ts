@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import AsyncHandler from "../../../commons/utils/asynhandler";
 import GuestInvitation from "../services/guest.service";
+import config from "../../../config/config";
 
 export default class GuestController extends AsyncHandler {
     constructor() {
@@ -22,7 +23,7 @@ export default class GuestController extends AsyncHandler {
         const guest = result.map((data)=>{
             return {
                 ...data,
-                share_link : `${req.protocol}://${req.get("host")}/${data.wedding_unique_id}?to=${data.unique_id}`
+                share_link : `${req.protocol}://${config.CLIENT_BASE_URL}/${data.wedding_unique_id}?to=${data.unique_id}`
             }
         })
         return {

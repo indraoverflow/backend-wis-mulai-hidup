@@ -14,5 +14,5 @@ export default {
     XENDIT_SECRET_KEY: process.env.XENDIT_SECRET_KEY!,
     XENDIT_URL: process.env.XENDIT_URL!,
     BASE_URL: process.env.BASE_URL! || "http://localhost:3000",
-    CLIENT_BASE_URL: process.env.CLIENT_BASE_URL! || "http://localhost:3030",
+    CLIENT_BASE_URL: process.env.CLIENT_BASE_URL! || "localhost:3030",
 };

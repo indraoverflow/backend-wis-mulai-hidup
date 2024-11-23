@@ -9,7 +9,7 @@ router.get("/",GuestController.GetGuestInvitation)
 router.post("/create",GuestDTO,UserJwtVerify.userVerify,GuestController.CreateGuest)
 router.get("/:wedding_id",UserJwtVerify.userVerify,GuestController.GetAllGuest)
 router.patch("/status/:guest_unid",UpdateGuest,GuestController.ChangeGuestStatus)
-router.patch("/upadate/:guest_uind",UpdateGuestDTO,UserJwtVerify.userVerify,GuestController.updateGuest)
+router.patch("/update/:guest_uind",UpdateGuestDTO,UserJwtVerify.userVerify,GuestController.updateGuest)
 router.delete("/delete/:guest_id",UserJwtVerify.userVerify,GuestController.DeleteGuest)
 
 export default (app: Router) => {
