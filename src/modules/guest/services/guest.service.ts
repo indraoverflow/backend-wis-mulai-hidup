@@ -29,7 +29,12 @@ export default class GuestInvitation {
             where:{
                 unique_id : id
             },
-            data : data
+            data : {
+                name: data.name,
+                phone_number: data.phone_number,
+                // status: data.status,
+                // wedding_unique_id: data.wedding_unique_id
+            }
         })
         return guestInvitations
     }

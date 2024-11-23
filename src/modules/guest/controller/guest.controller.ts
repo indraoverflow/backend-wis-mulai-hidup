@@ -35,7 +35,7 @@ export default class GuestController extends AsyncHandler {
     
     static updateGuest = this.handleRequest(async(req:Request,res:Response)=>{
         const {guest_unid} = req.params
-        const result = await GuestInvitation.UpdateGuest(guest_unid,req.body);
+        const result = await GuestInvitation.UpdateGuest(guest_unid, req.body);
         return  {
             message : "SUCCESS_UPDATE_GUEST",
             data : result,

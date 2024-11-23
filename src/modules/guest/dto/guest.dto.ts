@@ -37,7 +37,7 @@ export const UpdateGuest = [
 
 
 export const UpdateGuestDTO = [
-    body("wedding_unique_id").notEmpty(),
+    // body("wedding_unique_id").notEmpty(),
     body("name").isString().notEmpty(),
     body("phone_number").isString().notEmpty(),
     (req: Request, res: Response, next: NextFunction) => {
