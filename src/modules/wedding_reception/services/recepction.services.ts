@@ -202,6 +202,62 @@ export default class ReceptionService {
 		}
 	}
 
+	static async uploadReceptionMediaService(id: number, weddingMedia: WeddingMediaType[], manMedia: BrideGroomMediaType[], womanMedia: BrideGroomMediaType[], ourStoryMan: BrideGroomMediaType[], ourStoryWoman: BrideGroomMediaType[]) {
+		try {
+			const receptionT = await this.prisma.$transaction(async (prisma) => {
+				const receptionFound = await prisma.wedding_reception.findUnique({
+					where: { id }
+				})
+				if (!receptionFound) {
+					throw {
+						message: "RECEPTION_NOT_FOUND",
+						status: 404
+					}
+				}
+				await prisma.wedding_media.createMany({
+					data: weddingMedia
+				});
+				manMedia= manMedia.map((item) => {
+					return {
+						...item,
+						type: 'personal',
+						media_owner: "man"
+					}
+				})
+				womanMedia = womanMedia.map((item) => {
+					return {
+						...item,
+						type: 'personal',
+						media_owner: "woman"
+					}
+				})
+				ourStoryMan = ourStoryMan.map((item) => {
+					return {
+						...item,
+						type: 'story',
+						media_owner: "man"
+					}
+				})
+				ourStoryWoman = ourStoryWoman.map((item) => {
+					return {
+						...item,
+						type: 'story',
+						media_owner: "woman"
+					}
+				})
+				await prisma.bride_groom_media.createMany({
+					data: [...manMedia, ...womanMedia, ...ourStoryMan, ...ourStoryWoman]
+				});
+			})
+			return {
+				status: 200,
+				message: "Upload wedding, man, and woman media successfully"
+			}
+		} catch (error) {
+			return error
+		}
+	}
+
 	static async updateReceptionMediaService(id: number, weddingMedia: WeddingMediaType[], manMedia: BrideGroomMediaType[], womanMedia: BrideGroomMediaType[], ourStoryMan: BrideGroomMediaType[], ourStoryWoman: BrideGroomMediaType[]) {
 		const receptionT = await this.prisma.$transaction(async (prisma) => {
 			const receptionFound = await prisma.wedding_reception.findUnique({
@@ -213,6 +269,11 @@ export default class ReceptionService {
 					status: 404
 				}
 			}
+			await prisma.wedding_media.deleteMany({
+				where: {
+					wedding_reception_id: id
+				}
+			})
 			await prisma.wedding_media.createMany({
 				data: weddingMedia
 			});
@@ -244,13 +305,18 @@ export default class ReceptionService {
 					media_owner: "woman"
 				}
 			})
+			await prisma.bride_groom_media.deleteMany({
+				where: {
+					wedding_reception_id: id
+				}
+			})
 			await prisma.bride_groom_media.createMany({
 				data: [...manMedia, ...womanMedia, ...ourStoryMan, ...ourStoryWoman]
 			});
 		})
 		return {
 			status: 200,
-			message: "Upload wedding, man, and woman media successfully"
+			message: "Update wedding, man, and woman media successfully"
 		}
 	}
 
@@ -277,24 +343,82 @@ export default class ReceptionService {
 		}
 	}
 
-	static async updateOneReceptionService(id: number, data: ReceptionType ) {
+	static async updateOneReceptionService(id: number, data: ReceptionType, theme_id: number, wedding_ceremony: WeddingCeremonyType, account_bank: any) {
 		try {
-			const recepctionFound = await this.prisma.wedding_reception.findUnique({
-				where: { id }
-			})
-			if (!recepctionFound) {
-				throw {
-					message: "RECEPTION_NOT_FOUND",
-					status: 404
+			const receptionT = await this.prisma.$transaction(async (prisma) => {
+				const recepctionFound = await this.prisma.wedding_reception.findUnique({
+					where: { id }
+				})
+				if (!recepctionFound) {
+					throw {
+						message: "RECEPTION_NOT_FOUND",
+						status: 404
+					}
 				}
-			}
-			await this.prisma.wedding_reception.update({
-				where: { id },
-				data
+				await this.prisma.wedding_reception.update({
+					where: { id },
+					data: {
+						title_reception: data.title_reception,
+						name_man: data.name_man,
+						nickname_man: data.nickname_man,
+						prefix_man: data.prefix_man,
+						title_man: data.title_man,
+						father_man: data.father_man,
+						mother_man: data.mother_man,
+						description_man: data.description_man,
+						birthdate_man: new Date(data.birthdate_man),
+						name_woman: data.name_woman,
+						nickname_woman: data.nickname_woman,
+						prefix_woman: data.prefix_woman,
+						title_woman: data.title_woman,
+						father_woman: data.father_woman,
+						mother_woman: data.mother_woman,
+						description_woman: data.description_woman,
+						birthdate_woman: new Date(data.birthdate_woman),
+						start_date: new Date(data.start_date),
+						end_date: new Date(data.end_date),
+						start_time: data.start_time,
+						end_time: data.end_time,
+						time_zone: data.time_zone,
+						location: data.location,
+						address: data.address,
+						video_url: data.video_url,
+						theme_id: theme_id,
+					},
+				})
+				await this.prisma.wedding_ceremony.update({
+					where: { wedding_reception_id: id },
+					data: {
+						title_ceremony: wedding_ceremony.title_ceremony,
+						start_date: new Date(wedding_ceremony.start_date),
+						end_date: new Date(wedding_ceremony.end_date),
+						start_time: wedding_ceremony.start_time,
+						end_time: wedding_ceremony.end_time,
+						location: wedding_ceremony.location,
+						address: wedding_ceremony.address,
+					}
+				})
+
+				await this.prisma.account_bank.deleteMany({
+					where: {
+						wedding_reception_id: id
+					}
+				})
+				await prisma.account_bank.createMany({
+					data: account_bank.map((item: any) => ({
+						name: item.name,
+						number: item.number,
+						bank: item.bank,
+						wedding_reception_id: id
+					}))
+				})
+				return recepctionFound
 			})
 			return {
 				status: 200,
-				message: "Update reception successfully"
+				message: "Update reception successfully",
+				receptionId: receptionT.id,
+				uniqueId: receptionT.unique_id
 			}
 		} catch (error) {
 			return error

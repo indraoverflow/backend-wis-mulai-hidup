@@ -64,10 +64,25 @@ export default class ReceptionController extends AsyncHandler {
 		const {womanMedia} = photoLocations
 		const {ourStoryMan} = photoLocations
 		const {ourStoryWoman} = photoLocations
-		const response = await ReceptionService.updateReceptionMediaService(+receptionId, weddingMedia, manMedia, womanMedia, ourStoryMan, ourStoryWoman)
+		const response = await ReceptionService.uploadReceptionMediaService(+receptionId, weddingMedia, manMedia, womanMedia, ourStoryMan, ourStoryWoman)
 		return {
 			status: 200,
 			message: "Upload reception media successfully",
+		}
+	})
+
+	static UpdateReceptionMedia = this.handleRequest(async (req: Request, res: Response) => {
+		const {receptionId} = req.params
+		const photoLocations = (req.headers?.photoLocations ?? {}) as PhotoLocations;
+		const {weddingMedia} = photoLocations
+		const {manMedia} = photoLocations
+		const {womanMedia} = photoLocations
+		const {ourStoryMan} = photoLocations
+		const {ourStoryWoman} = photoLocations
+		const response = await ReceptionService.updateReceptionMediaService(+receptionId, weddingMedia, manMedia, womanMedia, ourStoryMan, ourStoryWoman)
+		return {
+			status: 200,
+			message: "Update reception media successfully",
 		}
 	})
 
@@ -80,7 +95,11 @@ export default class ReceptionController extends AsyncHandler {
 	static UpdateOneReception = this.handleRequest(async (req: Request, res: Response) => {
 		const {id} = req.params
 		const body = req.body
-		const response = await ReceptionService.updateOneReceptionService(+id, body)
+		const {theme_id} = body
+		const {wedding_ceremony} = body
+		const {account_bank} = body
+
+		const response = await ReceptionService.updateOneReceptionService(+id, body, theme_id, wedding_ceremony, account_bank)
 		return response
 	})
 
