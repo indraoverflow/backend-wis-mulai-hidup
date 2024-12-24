@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import AsyncHandler from "../../../commons/utils/asynhandler";
 import ReceptionService from "../services/recepction.services";
-
+import { QueryStatusType } from "../types/queryStatus.type";
 export default interface PhotoLocations {
 	weddingMedia: any[],
 	manMedia: any[],
@@ -23,10 +23,11 @@ export default class ReceptionController extends AsyncHandler {
 			data: response
 		}
 	})
-
+	
 	static GetReceptionByUser = this.handleRequest(async (req: Request, res: Response) => {
-		const {id} = req.params
-		const response = await ReceptionService.getReceptionByUserService(+id)
+		const {wedding_status} = req.query
+		const {user_id} = req.headers
+		const response = await ReceptionService.getReceptionByUserService(+user_id!, wedding_status as QueryStatusType)
 		return response
 	})
 
@@ -104,8 +105,8 @@ export default class ReceptionController extends AsyncHandler {
 	})
 
 	static UpdateCancelReception = this.handleRequest(async (req: Request, res: Response) => {
-		const {id} = req.params
-		const response = await ReceptionService.updateCancelReceptionService(+id)
+		const {unique_id} = req.params
+		const response = await ReceptionService.updateCancelReceptionService(unique_id)
 		return response
 	})
 

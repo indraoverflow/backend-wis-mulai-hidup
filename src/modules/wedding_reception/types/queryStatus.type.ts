@@ -1,0 +1,1 @@
+export type QueryStatusType = 'scheduled' | 'in_progress' | 'postponed' | 'completed' | 'cancelled'

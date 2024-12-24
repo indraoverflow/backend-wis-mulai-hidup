@@ -4,17 +4,18 @@ import { WeddingCeremonyType } from "../../wedding_ceremony/types/wedding_ceremo
 import { WeddingMediaType } from "../types/wedding_media.type";
 import { BrideGroomMediaType } from "../types/bridge_groom_media.type";
 import UniqID from "short-unique-id"
+import { QueryStatusType } from "../types/queryStatus.type";
 
 export default class ReceptionService {
 	private static prisma: PrismaClient = new PrismaClient();
 
 
-	static async getAllReceptionService() { 
+	static async getAllReceptionService() {
 		const reception = await this.prisma.wedding_reception.findMany()
 		return reception
 	}
 
-	static async getReceptionByUserService(id: number) {
+	static async getReceptionByUserService(id: number, wedding_status: QueryStatusType) {
 		try {
 			const user = await this.prisma.user.findUnique({
 				where: {
@@ -35,14 +36,16 @@ export default class ReceptionService {
 					status: 404
 				}
 			}
-			const reception = await this.prisma.wedding_reception.findMany({
+			const query = {
 				where: {
+					wedding_status: wedding_status ? wedding_status : undefined,
 					user_id: id
 				},
 				include: {
 					theme: true
 				}
-			})
+			}
+			const reception = await this.prisma.wedding_reception.findMany(query)
 
 			return reception
 		} catch (error) {
@@ -245,6 +248,7 @@ export default class ReceptionService {
 						media_owner: "woman"
 					}
 				})
+
 				await prisma.bride_groom_media.createMany({
 					data: [...manMedia, ...womanMedia, ...ourStoryMan, ...ourStoryWoman]
 				});
@@ -425,10 +429,10 @@ export default class ReceptionService {
 		}
 	}
 
-	static async updateCancelReceptionService(id: number) {
+	static async updateCancelReceptionService(unique_id: string) {
 		try {
 			const recepctionFound = await this.prisma.wedding_reception.findUnique({
-				where: { id }
+				where: { unique_id }
 			})
 			if (!recepctionFound) {
 				throw {
@@ -437,7 +441,7 @@ export default class ReceptionService {
 				}
 			}
 			await this.prisma.wedding_reception.update({
-				where: { id },
+				where: { unique_id },
 				data: {
 					wedding_status: 'cancelled'
 				}

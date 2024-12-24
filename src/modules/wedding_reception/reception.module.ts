@@ -8,16 +8,16 @@ import { CreateInvitation } from "../../commons/middleware/CreateInvitation";
 const router = Router();
 
 router.get("/all", UserJwtVerify.adminVerify, ReceptionController.GetAllReception)
+router.get("/user", UserJwtVerify.userVerify, ReceptionController.GetReceptionByUser)
 router.get("/:id", ReceptionController.GetOneReception)
 router.get('/get_by_unique_id/:unique_id', ReceptionController.GetOneReceptionByUid)
 router.delete("/:id", UserJwtVerify.adminVerify, ReceptionController.DeleteOneReception)
 router.patch("/:id", UserJwtVerify.userVerify, ReceptionController.UpdateOneReception)
-router.patch("/status/cancel/:id", UserJwtVerify.adminVerify, ReceptionController.UpdateCancelReception)
+router.patch("/status/cancel/:unique_id", UserJwtVerify.userVerify, ReceptionController.UpdateCancelReception)
+router.patch("/status/by-admin/cancel/:unique_id", UserJwtVerify.adminVerify, ReceptionController.UpdateCancelReception)
 router.patch("/status/complete/:id", UserJwtVerify.adminVerify, ReceptionController.UpdateCompleteReception)
 router.patch("/status/in_progress/:id", UserJwtVerify.adminVerify, ReceptionController.UpdateInProgressReception)
 
-router.get("/user/:id", ReceptionController.GetReceptionByUser)
-// router.post('/create', CreateInvitation.SubscriptionCheck,UserJwtVerify.userVerify, ReceptionController.CreateReception)
 router.post('/create', UserJwtVerify.userVerify, ReceptionController.CreateReception)
 router.post('/upload_media/:receptionId', UserJwtVerify.userVerify, uploadMultiple, ReceptionController.UploadReceptionMedia)
 router.patch('/update_media/:receptionId', UserJwtVerify.userVerify, uploadMultiple, ReceptionController.UpdateReceptionMedia)
