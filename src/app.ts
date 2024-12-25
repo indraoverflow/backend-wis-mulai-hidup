@@ -26,7 +26,7 @@ const limit = ratelimit({
 })
 
 const corsOptions = {
-    origin: config.BASE_URL,
+    origin: config.CLIENT_BASE_URL,
     credentials: true
 }
 
